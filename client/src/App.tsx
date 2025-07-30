@@ -7,6 +7,9 @@ import { useAuth } from "@/hooks/useAuth";
 import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
 import NotFound from "@/pages/not-found";
+import PaymentHistory from "@/pages/payment-history";
+import PayoffCalculator from "@/pages/payoff-calculator";
+import LoanDetails from "@/pages/loan-details";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -18,6 +21,9 @@ function Router() {
       ) : (
         <>
           <Route path="/" component={Dashboard} />
+          <Route path="/payment-history" component={PaymentHistory} />
+          <Route path="/payoff-calculator" component={PayoffCalculator} />
+          <Route path="/loan-details/:loanId" component={LoanDetails} />
         </>
       )}
       <Route component={NotFound} />

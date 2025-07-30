@@ -54,9 +54,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/payments', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
+      const parsedAmount = typeof req.body.amount === 'string' ? parseFloat(req.body.amount) : req.body.amount;
+      const parsedDate = typeof req.body.paymentDate === 'string' ? new Date(req.body.paymentDate) : req.body.paymentDate;
+      
       const paymentData = insertPaymentSchema.parse({
-        ...req.body,
         userId,
+        loanId: req.body.loanId,
+        amount: parsedAmount.toString(),
+        paymentDate: parsedDate,
+        paymentType: req.body.paymentType || 'emi',
+        notes: req.body.notes || null,
       });
 
       // Create payment
@@ -92,6 +99,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching recent payments:", error);
       res.status(500).json({ message: "Failed to fetch recent payments" });
+    }
+  });
+
+  app.get('/api/payments/history', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const payments = await storage.getUserPayments(userId, 1000); // Large limit for history
+      res.json(payments);
+    } catch (error) {
+      console.error("Error fetching payment history:", error);
+      res.status(500).json({ message: "Failed to fetch payment history" });
+    }
+  });
+
+  app.get('/api/payments/loan/:loanId', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { loanId } = req.params;
+      const payments = await storage.getLoanPayments(userId, loanId);
+      res.json(payments);
+    } catch (error) {
+      console.error("Error fetching loan payments:", error);
+      res.status(500).json({ message: "Failed to fetch loan payments" });
+    }
+  });
+
+  app.put('/api/loans/:loanId', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { loanId } = req.params;
+      
+      const updateData = {
+        name: req.body.name,
+        loanType: req.body.loanType,
+        emiAmount: req.body.emiAmount.toString(),
+        interestRate: req.body.interestRate.toString(),
+        remainingMonths: req.body.remainingMonths,
+      };
+
+      const updatedLoan = await storage.updateLoanDetails(loanId, userId, updateData);
+      res.json(updatedLoan);
+    } catch (error) {
+      console.error("Error updating loan:", error);
+      res.status(500).json({ message: "Failed to update loan" });
     }
   });
 

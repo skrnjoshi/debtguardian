@@ -3,6 +3,7 @@ import { MoreHorizontal, History, Calculator, Edit3, XCircle } from "lucide-reac
 import { formatCurrency } from "@/lib/currency";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
 
 interface LoanCardProps {
   loan: {
@@ -20,6 +21,7 @@ interface LoanCardProps {
 
 export function LoanCard({ loan }: LoanCardProps) {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   
@@ -45,26 +47,13 @@ export function LoanCard({ loan }: LoanCardProps) {
     
     switch (action) {
       case 'history':
-        toast({
-          title: "Payment History",
-          description: `Viewing payment history for ${loan.name}`,
-        });
+        setLocation('/payment-history');
         break;
       case 'payoff':
-        const monthsRemaining = loan.remainingMonths;
-        const totalPayoff = outstanding;
-        const monthlyInterest = (outstanding * interestRate) / (12 * 100);
-        toast({
-          title: "Payoff Calculator",
-          description: `${loan.name}: ${monthsRemaining} months left, Monthly interest: ${formatCurrency(monthlyInterest)}`,
-          duration: 5000,
-        });
+        setLocation('/payoff-calculator');
         break;
       case 'edit':
-        toast({
-          title: "Edit Loan",
-          description: `Feature coming soon: Edit details for ${loan.name}`,
-        });
+        setLocation(`/loan-details/${loan.id}`);
         break;
       case 'close':
         toast({

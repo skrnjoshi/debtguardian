@@ -26,7 +26,7 @@ export interface IStorage {
   // Payment operations
   createPayment(payment: InsertPayment): Promise<Payment>;
   getUserPayments(userId: string, limit?: number): Promise<Payment[]>;
-  getLoanPayments(loanId: string): Promise<Payment[]>;
+  getLoanPayments(userId: string, loanId: string): Promise<Payment[]>;
   
   // Initialize user with default loans
   initializeUserLoans(userId: string): Promise<void>;
@@ -82,6 +82,32 @@ export class DatabaseStorage implements IStorage {
     return loan;
   }
 
+  async updateLoanDetails(loanId: string, userId: string, updates: {
+    name: string;
+    loanType: string;
+    emiAmount: string;
+    interestRate: string;
+    remainingMonths: number;
+  }): Promise<Loan> {
+    const [loan] = await db
+      .update(loans)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(loans.id, loanId), eq(loans.userId, userId)))
+      .returning();
+    return loan;
+  }
+
+  async getLoanPayments(userId: string, loanId: string): Promise<Payment[]> {
+    return await db
+      .select()
+      .from(payments)
+      .where(and(eq(payments.userId, userId), eq(payments.loanId, loanId)))
+      .orderBy(desc(payments.paymentDate));
+  }
+
   // Payment operations
   async createPayment(payment: InsertPayment): Promise<Payment> {
     const [newPayment] = await db.insert(payments).values(payment).returning();
@@ -97,13 +123,7 @@ export class DatabaseStorage implements IStorage {
       .limit(limit);
   }
 
-  async getLoanPayments(loanId: string): Promise<Payment[]> {
-    return await db
-      .select()
-      .from(payments)
-      .where(eq(payments.loanId, loanId))
-      .orderBy(desc(payments.paymentDate));
-  }
+
 
   // Initialize user with default loans based on the provided data
   async initializeUserLoans(userId: string): Promise<void> {
