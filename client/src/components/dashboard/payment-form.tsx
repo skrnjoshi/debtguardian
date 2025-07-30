@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { format } from "date-fns";
-import { Check, DollarSign, Download, Calculator } from "lucide-react";
+import { Check, DollarSign, Download, Calculator, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -236,13 +236,18 @@ export function PaymentForm({ loans }: PaymentFormProps) {
 
             <Button
               type="submit"
-              className="w-full bg-green-600 text-white hover:bg-green-700"
-              disabled={paymentMutation.isPending}
+              className="w-full bg-green-600 text-white hover:bg-green-700 disabled:opacity-75"
+              disabled={paymentMutation.isPending || loans.length === 0}
             >
               {paymentMutation.isPending ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Logging Payment...
+                  Processing Payment...
+                </>
+              ) : loans.length === 0 ? (
+                <>
+                  <XCircle className="w-4 h-4 mr-2" />
+                  No Loans Available
                 </>
               ) : (
                 <>

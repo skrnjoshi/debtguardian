@@ -1,6 +1,8 @@
-import { MoreHorizontal } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { MoreHorizontal, History, Calculator, Edit3, XCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/currency";
 import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 
 interface LoanCardProps {
   loan: {
@@ -17,10 +19,62 @@ interface LoanCardProps {
 }
 
 export function LoanCard({ loan }: LoanCardProps) {
+  const { toast } = useToast();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  
   const interestRate = parseFloat(loan.interestRate);
   const outstanding = parseFloat(loan.outstandingAmount);
   const original = parseFloat(loan.originalAmount);
   const progressPercent = ((original - outstanding) / original) * 100;
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleMenuAction = (action: string) => {
+    setIsMenuOpen(false); // Close menu when action is clicked
+    
+    switch (action) {
+      case 'history':
+        toast({
+          title: "Payment History",
+          description: `Viewing payment history for ${loan.name}`,
+        });
+        break;
+      case 'payoff':
+        const monthsRemaining = loan.remainingMonths;
+        const totalPayoff = outstanding;
+        const monthlyInterest = (outstanding * interestRate) / (12 * 100);
+        toast({
+          title: "Payoff Calculator",
+          description: `${loan.name}: ${monthsRemaining} months left, Monthly interest: ${formatCurrency(monthlyInterest)}`,
+          duration: 5000,
+        });
+        break;
+      case 'edit':
+        toast({
+          title: "Edit Loan",
+          description: `Feature coming soon: Edit details for ${loan.name}`,
+        });
+        break;
+      case 'close':
+        toast({
+          title: "Close Loan",
+          description: `This will mark ${loan.name} as fully paid. Feature coming soon.`,
+          variant: "destructive",
+        });
+        break;
+    }
+  };
 
   const getInterestRateColor = (rate: number) => {
     if (rate >= 25) return "danger";
@@ -70,27 +124,48 @@ export function LoanCard({ loan }: LoanCardProps) {
             {interestRate}%
           </span>
         </div>
-        <div className="relative group">
-          <button className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100">
+        <div className="relative" ref={menuRef}>
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
             <MoreHorizontal className="w-5 h-5" />
           </button>
-          <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-            <div className="py-2">
-              <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                View Payment History
-              </button>
-              <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                Calculate Payoff
-              </button>
-              <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                Edit Loan Details
-              </button>
-              <hr className="my-1" />
-              <button className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors">
-                Mark as Closed
-              </button>
+          {isMenuOpen && (
+            <div className="absolute right-0 top-full mt-1 w-52 bg-white rounded-lg shadow-lg border border-gray-200 z-20 animate-in fade-in-0 zoom-in-95">
+              <div className="py-2">
+                <button 
+                  onClick={() => handleMenuAction('history')}
+                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
+                >
+                  <History className="w-4 h-4" />
+                  View Payment History
+                </button>
+                <button 
+                  onClick={() => handleMenuAction('payoff')}
+                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
+                >
+                  <Calculator className="w-4 h-4" />
+                  Calculate Payoff
+                </button>
+                <button 
+                  onClick={() => handleMenuAction('edit')}
+                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
+                >
+                  <Edit3 className="w-4 h-4" />
+                  Edit Loan Details
+                </button>
+                <hr className="my-1" />
+                <button 
+                  onClick={() => handleMenuAction('close')}
+                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
+                >
+                  <XCircle className="w-4 h-4" />
+                  Mark as Closed
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       
