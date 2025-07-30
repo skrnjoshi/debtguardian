@@ -65,7 +65,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Update loan outstanding amount
       const loan = await storage.getLoan(paymentData.loanId);
       if (loan) {
-        const newOutstanding = Math.max(0, parseFloat(loan.outstandingAmount) - paymentData.amount);
+        const currentOutstanding = parseFloat(loan.outstandingAmount);
+        const paymentAmount = typeof paymentData.amount === 'string' ? parseFloat(paymentData.amount) : paymentData.amount;
+        const newOutstanding = Math.max(0, currentOutstanding - paymentAmount);
         await storage.updateLoan(paymentData.loanId, {
           outstandingAmount: newOutstanding.toString(),
         });
