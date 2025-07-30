@@ -105,6 +105,13 @@ export const insertLoanSchema = createInsertSchema(loans).omit({
 export const insertPaymentSchema = createInsertSchema(payments).omit({
   id: true,
   createdAt: true,
+}).extend({
+  amount: z.union([z.string(), z.number()]).transform((val) => 
+    typeof val === 'string' ? parseFloat(val) : val
+  ),
+  paymentDate: z.union([z.string(), z.date()]).transform((val) => 
+    typeof val === 'string' ? new Date(val) : val
+  ),
 });
 
 // Types

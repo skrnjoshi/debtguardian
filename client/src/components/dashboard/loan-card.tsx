@@ -70,9 +70,28 @@ export function LoanCard({ loan }: LoanCardProps) {
             {interestRate}%
           </span>
         </div>
-        <button className="text-gray-400 hover:text-gray-600">
-          <MoreHorizontal className="w-5 h-5" />
-        </button>
+        <div className="relative group">
+          <button className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100">
+            <MoreHorizontal className="w-5 h-5" />
+          </button>
+          <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+            <div className="py-2">
+              <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                View Payment History
+              </button>
+              <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                Calculate Payoff
+              </button>
+              <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                Edit Loan Details
+              </button>
+              <hr className="my-1" />
+              <button className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors">
+                Mark as Closed
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">

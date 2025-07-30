@@ -50,7 +50,7 @@ export function PaymentForm({ loans }: PaymentFormProps) {
       await apiRequest("POST", "/api/payments", {
         ...data,
         amount: parseFloat(data.amount),
-        paymentDate: new Date(data.paymentDate).toISOString(),
+        paymentDate: new Date(data.paymentDate),
       });
     },
     onSuccess: () => {
@@ -99,15 +99,28 @@ export function PaymentForm({ loans }: PaymentFormProps) {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
         <div className="space-y-3">
-          <Button className="w-full bg-primary text-white hover:bg-blue-800" disabled>
+          <Button 
+            className="w-full bg-primary text-white hover:bg-blue-800"
+            onClick={() => document.getElementById('payment-form')?.scrollIntoView({ behavior: 'smooth' })}
+          >
             <DollarSign className="w-4 h-4 mr-2" />
             Make Payment
           </Button>
-          <Button variant="outline" className="w-full" disabled>
+          <Button variant="outline" className="w-full" onClick={() => {
+            toast({
+              title: "Coming Soon",
+              description: "Export functionality will be available in the next update.",
+            });
+          }}>
             <Download className="w-4 h-4 mr-2" />
             Export Records
           </Button>
-          <Button variant="outline" className="w-full" disabled>
+          <Button variant="outline" className="w-full" onClick={() => {
+            toast({
+              title: "Coming Soon", 
+              description: "Payoff calculator will be available in the next update.",
+            });
+          }}>
             <Calculator className="w-4 h-4 mr-2" />
             Payoff Calculator
           </Button>
@@ -115,7 +128,7 @@ export function PaymentForm({ loans }: PaymentFormProps) {
       </div>
 
       {/* Payment Form */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <div id="payment-form" className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Log Payment</h3>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

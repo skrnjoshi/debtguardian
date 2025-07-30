@@ -54,10 +54,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/payments', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
+      console.log('Payment request body:', req.body);
+      
       const paymentData = insertPaymentSchema.parse({
         ...req.body,
         userId,
       });
+      
+      console.log('Parsed payment data:', paymentData);
 
       // Create payment
       const payment = await storage.createPayment(paymentData);
