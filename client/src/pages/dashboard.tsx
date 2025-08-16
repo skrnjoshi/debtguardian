@@ -152,9 +152,11 @@ export default function Dashboard() {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
               <ChartLine className="text-primary text-xl sm:text-2xl" />
-              <h1 className="text-lg sm:text-xl font-bold text-gray-900">DebtGuardian</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">
+                DebtGuardian
+              </h1>
             </div>
-            
+
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
               <span className="text-sm text-gray-600 truncate">
@@ -209,12 +211,12 @@ export default function Dashboard() {
                   <Settings className="w-4 h-4 mr-2" />
                   Settings
                 </Button>
-                <Button 
+                <Button
                   onClick={() => {
                     logout();
                     setShowMobileMenu(false);
-                  }} 
-                  variant="outline" 
+                  }}
+                  variant="outline"
                   size="sm"
                   className="justify-start"
                 >

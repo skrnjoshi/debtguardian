@@ -11,7 +11,9 @@ export default function Landing() {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
               <ChartLine className="text-primary text-xl sm:text-2xl" />
-              <h1 className="text-lg sm:text-xl font-bold text-gray-900">DebtGuardian</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">
+                DebtGuardian
+              </h1>
             </div>
             <Button
               onClick={() => (window.location.href = "/login")}

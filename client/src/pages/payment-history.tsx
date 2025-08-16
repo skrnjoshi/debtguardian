@@ -141,7 +141,11 @@ export default function PaymentHistory() {
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Link href="/">
-                <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs sm:text-sm"
+                >
                   <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                   <span className="hidden sm:inline">Back to Dashboard</span>
                   <span className="sm:hidden">Back</span>

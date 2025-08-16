@@ -189,7 +189,11 @@ export default function LoanDetails() {
                 </h1>
               </div>
               <Link href="/">
-                <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs sm:text-sm"
+                >
                   <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                   <span className="hidden sm:inline">Back to Dashboard</span>
                   <span className="sm:hidden">Back</span>
@@ -220,7 +224,9 @@ export default function LoanDetails() {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
               <ChartLine className="text-primary text-xl sm:text-2xl" />
-              <h1 className="text-lg sm:text-xl font-bold text-gray-900">Loan Details</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">
+                Loan Details
+              </h1>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Button
@@ -244,7 +250,11 @@ export default function LoanDetails() {
                 )}
               </Button>
               <Link href="/">
-                <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs sm:text-sm"
+                >
                   <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                   <span className="hidden sm:inline">Back to Dashboard</span>
                   <span className="sm:hidden">Back</span>
