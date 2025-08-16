@@ -3,8 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Downloads() {
-  const handleDownload = (version: string, filename: string) => {
-    window.open(`/api/download/apk/${version}`, "_blank");
+  const handleDownload = (filename: string) => {
+    const link = document.createElement('a');
+    link.href = `/${filename}`;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -46,10 +51,7 @@ export default function Downloads() {
               </div>
               <Button
                 onClick={() =>
-                  handleDownload(
-                    "v1.0.0-release",
-                    "DebtGuardian-v1.0.0-release.apk"
-                  )
+                  handleDownload("DebtGuardian-v1.0.0-release.apk")
                 }
                 className="w-full bg-green-600 hover:bg-green-700"
               >
@@ -78,10 +80,7 @@ export default function Downloads() {
               </div>
               <Button
                 onClick={() =>
-                  handleDownload(
-                    "v1.0.0-debug",
-                    "DebtGuardian-v1.0.0-debug.apk"
-                  )
+                  handleDownload("DebtGuardian-v1.0.0-debug.apk")
                 }
                 variant="outline"
                 className="w-full border-orange-300 text-orange-700 hover:bg-orange-50"

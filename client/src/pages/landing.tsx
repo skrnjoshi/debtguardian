@@ -35,7 +35,12 @@ export default function Landing() {
               {/* Mobile APK Download Button */}
               <Button
                 onClick={() => {
-                  window.open("/api/download/apk/v1.0.0-release", "_blank");
+                  const link = document.createElement('a');
+                  link.href = '/DebtGuardian-v1.0.0-release.apk';
+                  link.download = 'DebtGuardian-v1.0.0-release.apk';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
                 }}
                 variant="outline"
                 className="md:hidden flex items-center space-x-1 text-xs px-2 py-1 border-green-300 text-green-700 hover:bg-green-50"
@@ -137,7 +142,12 @@ export default function Landing() {
                   <Button
                     className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
                     onClick={() => {
-                      window.open("/api/download/apk/v1.0.0-release", "_blank");
+                      const link = document.createElement('a');
+                      link.href = '/DebtGuardian-v1.0.0-release.apk';
+                      link.download = 'DebtGuardian-v1.0.0-release.apk';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
                     }}
                   >
                     Download APK (46MB)
