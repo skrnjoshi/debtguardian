@@ -14,6 +14,7 @@ import { PaymentForm } from "@/components/dashboard/payment-form";
 import { FinancialHealth } from "@/components/dashboard/financial-health";
 import { AnalyticsCharts } from "@/components/dashboard/analytics-charts";
 import { UserProfileSettings } from "@/components/dashboard/user-profile-settings";
+import { MobileAppBanner } from "@/components/mobile-app-banner";
 
 interface Loan {
   id: string;
@@ -296,6 +297,9 @@ export default function Dashboard() {
         onClose={() => setShowProfileSettings(false)}
         onProfileUpdated={handleProfileUpdated}
       />
+      
+      {/* Mobile App Download Banner */}
+      <MobileAppBanner />
     </div>
   );
 }

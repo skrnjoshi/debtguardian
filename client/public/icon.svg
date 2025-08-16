@@ -1,0 +1,8 @@
+<!-- Placeholder App Icon - Replace with actual designed icons in production -->
+<svg width="192" height="192" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" fill="#2563eb" rx="24"/>
+  <circle cx="96" cy="80" r="32" fill="white"/>
+  <rect x="60" y="120" width="72" height="8" fill="white" rx="4"/>
+  <rect x="70" y="135" width="52" height="6" fill="white" rx="3"/>
+  <rect x="75" y="148" width="42" height="6" fill="white" rx="3"/>
+</svg>

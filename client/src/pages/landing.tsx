@@ -1,6 +1,7 @@
 import { ChartLine, CreditCard, TrendingUp, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { MobileAppBanner } from "@/components/mobile-app-banner";
 
 export default function Landing() {
   return (
@@ -112,6 +113,9 @@ export default function Landing() {
           </div>
         </div>
       </main>
+      
+      {/* Mobile App Download Banner */}
+      <MobileAppBanner />
     </div>
   );
 }
