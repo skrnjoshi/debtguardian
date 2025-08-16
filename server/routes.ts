@@ -46,6 +46,32 @@ router.get("/health", (req: Request, res: Response) => {
   res.status(200).json(healthcheck);
 });
 
+// APK download endpoint
+router.get("/download/apk/:version", (req: Request, res: Response) => {
+  const { version } = req.params;
+  const fs = require("fs");
+  const path = require("path");
+
+  const apkPath = path.join(
+    __dirname,
+    "..",
+    "mobile-app",
+    "releases",
+    `DebtGuardian-${version}.apk`
+  );
+
+  if (fs.existsSync(apkPath)) {
+    res.setHeader("Content-Type", "application/vnd.android.package-archive");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=DebtGuardian-${version}.apk`
+    );
+    res.sendFile(apkPath);
+  } else {
+    res.status(404).json({ error: "APK file not found" });
+  }
+});
+
 // System status endpoint for monitoring
 router.get("/status", (req: Request, res: Response) => {
   const status = {

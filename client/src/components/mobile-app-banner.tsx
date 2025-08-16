@@ -70,25 +70,33 @@ export function MobileAppBanner() {
     if (canInstallPWA) {
       handleInstallPWA();
     } else {
-      // Show information about upcoming mobile app
+      // Show download options for mobile app
       const appInfo = `📱 DebtGuardian Mobile App
 
-🚀 Coming Soon: Native Android & iOS apps!
+✅ Available Downloads:
 
-✅ Current Options:
+🤖 Android APK:
+• Production: DebtGuardian-v1.0.0-release.apk (46MB)
+• Debug: DebtGuardian-v1.0.0-debug.apk (100MB)
+
+🌐 Progressive Web App:
 • Add to Home Screen for app-like experience
-• Access all features through mobile browser
-• Offline support when added to home screen
+• Works on all devices (Android, iOS, Desktop)
+• No installation required
 
-🌐 Web App URL: https://debtguardian.onrender.com/
+📦 APK Features:
+• Native Android app experience
+• WebView integration with full functionality
+• Optimized performance
+• Offline capabilities
 
-📦 The native mobile app will include:
-• WebView integration with full website functionality  
-• Push notifications for payment reminders
-• Biometric login support
-• Enhanced offline capabilities
+💡 How to install APK:
+1. Download the APK file
+2. Enable "Install from Unknown Sources" in Android settings
+3. Open the APK file to install
+4. Launch DebtGuardian from your app drawer
 
-Stay tuned for the official app launch!`;
+🔗 Web App: https://debtguardian.onrender.com/`;
 
       alert(appInfo);
     }
@@ -169,6 +177,17 @@ ${instructions}
                       App Info
                     </>
                   )}
+                </Button>
+                <Button
+                  onClick={() => {
+                    window.open("/api/download/apk/v1.0.0-release", "_blank");
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="text-xs h-8 border-green-300 text-green-700 hover:bg-green-50"
+                >
+                  <Download className="w-3 h-3 mr-1" />
+                  APK
                 </Button>
                 <Button
                   onClick={addToHomeScreen}

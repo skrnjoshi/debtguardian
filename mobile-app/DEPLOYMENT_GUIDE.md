@@ -10,12 +10,14 @@
 ## 📱 APK Files
 
 ### Release APK (Production)
+
 - **File**: `DebtGuardian-v1.0.0-release.apk`
 - **Size**: 46MB
 - **Target**: Production deployment
 - **Optimized**: Yes (minified, optimized)
 
-### Debug APK (Development)  
+### Debug APK (Development)
+
 - **File**: `DebtGuardian-v1.0.0-debug.apk`
 - **Size**: 100MB
 - **Target**: Development/testing
@@ -24,12 +26,14 @@
 ## 🔧 Technical Specifications
 
 ### React Native Configuration
+
 - **React Native Version**: 0.81.0
 - **WebView Library**: react-native-webview
 - **Safe Area**: react-native-safe-area-context
 - **Target URL**: https://debtguardian.onrender.com
 
 ### Android Configuration
+
 - **Package**: com.debtguardian.app
 - **Min SDK**: API level as per React Native 0.81
 - **Target SDK**: Latest supported
@@ -38,16 +42,19 @@
 ## 📦 Deployment Options
 
 ### 1. Direct APK Distribution
+
 - Share the `DebtGuardian-v1.0.0-release.apk` file
 - Users can install directly (enable "Unknown Sources")
 - Suitable for testing and internal distribution
 
 ### 2. Google Play Store
+
 - Use the release APK for Play Console upload
 - Follow Google Play publishing guidelines
 - Add proper store listing information
 
 ### 3. Enterprise Distribution
+
 - Use Mobile Device Management (MDM) systems
 - Distribute through enterprise app stores
 - Configure app policies as needed
@@ -55,6 +62,7 @@
 ## 🌐 Web App Integration
 
 The mobile app loads the production web application:
+
 - **URL**: https://debtguardian.onrender.com
 - **Features**: Full web app functionality in native container
 - **Updates**: Web app updates reflect immediately in mobile app
@@ -63,11 +71,13 @@ The mobile app loads the production web application:
 ## 🔄 Update Strategy
 
 ### Web Content Updates
+
 - No app store updates needed
 - Changes to web app reflect immediately
 - Users see updates on next app launch
 
 ### Native App Updates
+
 - For React Native or native feature changes
 - Requires new APK generation and distribution
 - Version bump in package.json and android/app/build.gradle
@@ -86,18 +96,21 @@ The mobile app loads the production web application:
 ## 🚀 Deployment Commands
 
 ### Generate New Release APK
+
 ```bash
 cd mobile-app/DebtGuardianApp/android
 ./gradlew assembleRelease
 ```
 
 ### Generate Debug APK
+
 ```bash
 cd mobile-app/DebtGuardianApp/android
 ./gradlew assembleDebug
 ```
 
 ### Test in Emulator
+
 ```bash
 cd mobile-app/DebtGuardianApp
 npx @react-native-community/cli run-android

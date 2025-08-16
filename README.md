@@ -30,12 +30,14 @@ A professional debt and loan management application built with React, TypeScript
 ## 📱 Mobile App
 
 ### Android App Available Now!
+
 - **Package**: `com.debtguardian.app`
 - **Size**: 46MB (Release APK)
 - **Features**: Full web app functionality in native container
 - **Installation**: Download from [mobile-app/releases/](./mobile-app/releases/)
 
 ### Cross-Platform Ready
+
 - **React Native 0.81**: Modern cross-platform foundation
 - **iOS Ready**: Same codebase can build iOS version
 - **WebView Integration**: Seamless web app loading

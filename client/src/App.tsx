@@ -15,6 +15,7 @@ const NotFound = lazy(() => import("@/pages/not-found"));
 const PaymentHistory = lazy(() => import("@/pages/payment-history"));
 const PayoffCalculator = lazy(() => import("@/pages/payoff-calculator"));
 const LoanDetails = lazy(() => import("@/pages/loan-details"));
+const Downloads = lazy(() => import("@/pages/downloads"));
 
 // Loading component for suspense
 function LoadingSpinner() {
@@ -49,6 +50,7 @@ function Router() {
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/downloads" component={Downloads} />
         <Route path="/" component={hasToken ? Dashboard : Landing} />
         <Route path="/dashboard" component={hasToken ? Dashboard : NotFound} />
         <Route
