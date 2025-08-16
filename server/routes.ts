@@ -52,11 +52,10 @@ router.get("/download/apk/:version", (req: Request, res: Response) => {
   const fs = require("fs");
   const path = require("path");
 
+  // In production, APK files are in the dist/public directory
   const apkPath = path.join(
     __dirname,
-    "..",
-    "mobile-app",
-    "releases",
+    "public",
     `DebtGuardian-${version}.apk`
   );
 
