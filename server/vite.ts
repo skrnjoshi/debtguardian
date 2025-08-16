@@ -76,6 +76,20 @@ export function serveStatic(app: Express) {
     );
   }
 
+  // Special handling for APK files with correct MIME type
+  app.get(/.*\.apk$/, (req, res) => {
+    const fileName = path.basename(req.path);
+    const filePath = path.join(distPath, fileName);
+    
+    if (fs.existsSync(filePath)) {
+      res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+      res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+      res.sendFile(filePath);
+    } else {
+      res.status(404).send('APK file not found');
+    }
+  });
+
   app.use(express.static(distPath));
 
   // fall through to index.html if the file doesn't exist

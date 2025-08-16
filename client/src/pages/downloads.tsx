@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Downloads() {
   const handleDownload = (filename: string) => {
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = `/${filename}`;
     link.download = filename;
     document.body.appendChild(link);
@@ -79,9 +79,7 @@ export default function Downloads() {
                 <p className="text-sm text-gray-500">Build: Debug</p>
               </div>
               <Button
-                onClick={() =>
-                  handleDownload("DebtGuardian-v1.0.0-debug.apk")
-                }
+                onClick={() => handleDownload("DebtGuardian-v1.0.0-debug.apk")}
                 variant="outline"
                 className="w-full border-orange-300 text-orange-700 hover:bg-orange-50"
               >

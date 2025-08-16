@@ -180,9 +180,9 @@ ${instructions}
                 </Button>
                 <Button
                   onClick={() => {
-                    const link = document.createElement('a');
-                    link.href = '/DebtGuardian-v1.0.0-release.apk';
-                    link.download = 'DebtGuardian-v1.0.0-release.apk';
+                    const link = document.createElement("a");
+                    link.href = "/DebtGuardian-v1.0.0-release.apk";
+                    link.download = "DebtGuardian-v1.0.0-release.apk";
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);

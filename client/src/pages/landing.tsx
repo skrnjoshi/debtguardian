@@ -35,9 +35,9 @@ export default function Landing() {
               {/* Mobile APK Download Button */}
               <Button
                 onClick={() => {
-                  const link = document.createElement('a');
-                  link.href = '/DebtGuardian-v1.0.0-release.apk';
-                  link.download = 'DebtGuardian-v1.0.0-release.apk';
+                  const link = document.createElement("a");
+                  link.href = "/DebtGuardian-v1.0.0-release.apk";
+                  link.download = "DebtGuardian-v1.0.0-release.apk";
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
@@ -142,9 +142,9 @@ export default function Landing() {
                   <Button
                     className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
                     onClick={() => {
-                      const link = document.createElement('a');
-                      link.href = '/DebtGuardian-v1.0.0-release.apk';
-                      link.download = 'DebtGuardian-v1.0.0-release.apk';
+                      const link = document.createElement("a");
+                      link.href = "/DebtGuardian-v1.0.0-release.apk";
+                      link.download = "DebtGuardian-v1.0.0-release.apk";
                       document.body.appendChild(link);
                       link.click();
                       document.body.removeChild(link);
