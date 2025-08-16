@@ -46,29 +46,11 @@ router.get("/health", (req: Request, res: Response) => {
   res.status(200).json(healthcheck);
 });
 
-// APK download endpoint
+// APK download endpoint - redirect to direct file access for better compatibility
 router.get("/download/apk/:version", (req: Request, res: Response) => {
   const { version } = req.params;
-  const fs = require("fs");
-  const path = require("path");
-
-  // In production, APK files are in the dist/public directory
-  const apkPath = path.join(
-    __dirname,
-    "public",
-    `DebtGuardian-${version}.apk`
-  );
-
-  if (fs.existsSync(apkPath)) {
-    res.setHeader("Content-Type", "application/vnd.android.package-archive");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=DebtGuardian-${version}.apk`
-    );
-    res.sendFile(apkPath);
-  } else {
-    res.status(404).json({ error: "APK file not found" });
-  }
+  // Redirect to direct file access instead of serving through API
+  res.redirect(301, `/DebtGuardian-${version}.apk`);
 });
 
 // System status endpoint for monitoring
