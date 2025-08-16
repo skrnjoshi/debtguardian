@@ -8,8 +8,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MobileAppBanner } from "@/components/mobile-app-banner";
+import { useIsNativeApp } from "@/hooks/use-native-app";
 
 export default function Landing() {
+  const isNativeApp = useIsNativeApp();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
@@ -32,22 +35,24 @@ export default function Landing() {
                 <Download className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Downloads</span>
               </Button>
-              {/* Mobile APK Download Button */}
-              <Button
-                onClick={() => {
-                  const link = document.createElement("a");
-                  link.href = "/DebtGuardian-v1.0.0-release.apk";
-                  link.download = "DebtGuardian-v1.0.0-release.apk";
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                }}
-                variant="outline"
-                className="md:hidden flex items-center space-x-1 text-xs px-2 py-1 border-green-300 text-green-700 hover:bg-green-50"
-              >
-                <Download className="w-3 h-3" />
-                <span>APK</span>
-              </Button>
+              {/* Mobile APK Download Button - Hidden in native app */}
+              {!isNativeApp && (
+                <Button
+                  onClick={() => {
+                    const link = document.createElement("a");
+                    link.href = "/DebtGuardian-v1.0.0-release.apk";
+                    link.download = "DebtGuardian-v1.0.0-release.apk";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                  variant="outline"
+                  className="md:hidden flex items-center space-x-1 text-xs px-2 py-1 border-green-300 text-green-700 hover:bg-green-50"
+                >
+                  <Download className="w-3 h-3" />
+                  <span>APK</span>
+                </Button>
+              )}
               <Button
                 onClick={() => (window.location.href = "/login")}
                 className="bg-primary hover:bg-blue-800 text-sm sm:text-base px-3 sm:px-4"
@@ -139,20 +144,31 @@ export default function Landing() {
                   Native Android app with full functionality
                 </p>
                 <div className="space-y-2">
-                  <Button
-                    className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
-                    onClick={() => {
-                      const link = document.createElement("a");
-                      link.href = "/DebtGuardian-v1.0.0-release.apk";
-                      link.download = "DebtGuardian-v1.0.0-release.apk";
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    }}
-                  >
-                    Download APK (46MB)
-                  </Button>
-                  <p className="text-xs text-blue-200">Production Release</p>
+                  {!isNativeApp ? (
+                    <>
+                      <Button
+                        className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
+                        onClick={() => {
+                          const link = document.createElement("a");
+                          link.href = "/DebtGuardian-v1.0.0-release.apk";
+                          link.download = "DebtGuardian-v1.0.0-release.apk";
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }}
+                      >
+                        Download APK (46MB)
+                      </Button>
+                      <p className="text-xs text-blue-200">Production Release</p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-full py-3 px-4 bg-green-500/20 text-green-100 rounded border border-green-400/30">
+                        ✅ Already Installed
+                      </div>
+                      <p className="text-xs text-green-200">You're using the native app!</p>
+                    </>
+                  )}
                 </div>
               </div>
 

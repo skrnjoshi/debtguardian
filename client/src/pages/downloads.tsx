@@ -1,8 +1,11 @@
 import { ArrowLeft, Download, Smartphone, Monitor, Apple } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useIsNativeApp } from "@/hooks/use-native-app";
 
 export default function Downloads() {
+  const isNativeApp = useIsNativeApp();
+
   const handleDownload = (filename: string) => {
     const link = document.createElement("a");
     link.href = `/${filename}`;
@@ -31,63 +34,89 @@ export default function Downloads() {
         </div>
 
         {/* Download Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Android APK Release */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader className="text-center">
-              <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <Smartphone className="w-8 h-8 text-green-600" />
-              </div>
-              <CardTitle className="text-xl">Android App (Release)</CardTitle>
-            </CardHeader>
-            <CardContent className="text-center">
-              <p className="text-gray-600 mb-4">
-                Optimized production build for Android devices
-              </p>
-              <div className="space-y-2 mb-6">
-                <p className="text-sm text-gray-500">Version: v1.0.0</p>
-                <p className="text-sm text-gray-500">Size: 46 MB</p>
-                <p className="text-sm text-gray-500">Build: Production</p>
-              </div>
-              <Button
-                onClick={() =>
-                  handleDownload("DebtGuardian-v1.0.0-release.apk")
-                }
-                className="w-full bg-green-600 hover:bg-green-700"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download APK
-              </Button>
-            </CardContent>
-          </Card>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Android APK Release - Hidden in native app */}
+          {!isNativeApp ? (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="text-center">
+                <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <Smartphone className="w-8 h-8 text-green-600" />
+                </div>
+                <CardTitle className="text-xl">Android App (Release)</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-gray-600 mb-4">
+                  Optimized production build for Android devices
+                </p>
+                <div className="space-y-2 mb-6">
+                  <p className="text-sm text-gray-500">Version: v1.0.0</p>
+                  <p className="text-sm text-gray-500">Size: 46 MB</p>
+                  <p className="text-sm text-gray-500">Build: Production</p>
+                </div>
+                <Button
+                  onClick={() =>
+                    handleDownload("DebtGuardian-v1.0.0-release.apk")
+                  }
+                  className="w-full bg-green-600 hover:bg-green-700"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download APK
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="hover:shadow-lg transition-shadow border-green-200 bg-green-50">
+              <CardHeader className="text-center">
+                <div className="mx-auto w-16 h-16 bg-green-200 rounded-full flex items-center justify-center mb-4">
+                  <Smartphone className="w-8 h-8 text-green-700" />
+                </div>
+                <CardTitle className="text-xl text-green-800">Android App (Release)</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-green-700 mb-4">
+                  ✅ You're currently using this version!
+                </p>
+                <div className="space-y-2 mb-6">
+                  <p className="text-sm text-green-600">Version: v1.0.0</p>
+                  <p className="text-sm text-green-600">Size: 46 MB</p>
+                  <p className="text-sm text-green-600">Status: Active</p>
+                </div>
+                <div className="w-full py-3 px-4 bg-green-200 text-green-800 rounded font-medium">
+                  Already Installed
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
-          {/* Android APK Debug */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader className="text-center">
-              <div className="mx-auto w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
-                <Smartphone className="w-8 h-8 text-orange-600" />
-              </div>
-              <CardTitle className="text-xl">Android App (Debug)</CardTitle>
-            </CardHeader>
-            <CardContent className="text-center">
-              <p className="text-gray-600 mb-4">
-                Debug build with additional logging for development
-              </p>
-              <div className="space-y-2 mb-6">
-                <p className="text-sm text-gray-500">Version: v1.0.0</p>
-                <p className="text-sm text-gray-500">Size: 100 MB</p>
-                <p className="text-sm text-gray-500">Build: Debug</p>
-              </div>
-              <Button
-                onClick={() => handleDownload("DebtGuardian-v1.0.0-debug.apk")}
-                variant="outline"
-                className="w-full border-orange-300 text-orange-700 hover:bg-orange-50"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download Debug APK
-              </Button>
-            </CardContent>
-          </Card>
+          {/* Android APK Debug - Hidden in native app */}
+          {!isNativeApp && (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="text-center">
+                <div className="mx-auto w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                  <Smartphone className="w-8 h-8 text-orange-600" />
+                </div>
+                <CardTitle className="text-xl">Android App (Debug)</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-gray-600 mb-4">
+                  Debug build with additional logging for development
+                </p>
+                <div className="space-y-2 mb-6">
+                  <p className="text-sm text-gray-500">Version: v1.0.0</p>
+                  <p className="text-sm text-gray-500">Size: 100 MB</p>
+                  <p className="text-sm text-gray-500">Build: Debug</p>
+                </div>
+                <Button
+                  onClick={() => handleDownload("DebtGuardian-v1.0.0-debug.apk")}
+                  variant="outline"
+                  className="w-full border-orange-300 text-orange-700 hover:bg-orange-50"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Debug APK
+                </Button>
+              </CardContent>
+            </Card>
+          )}
 
           {/* PWA */}
           <Card className="hover:shadow-lg transition-shadow">

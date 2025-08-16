@@ -12,6 +12,15 @@ export function MobileAppBanner() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
+    // Check if running inside the native DebtGuardian app
+    const isNativeApp = (window as any).isDebtGuardianNativeApp === true;
+    
+    // Don't show banner if running in native app
+    if (isNativeApp) {
+      console.log('Running in native app - hiding mobile banner');
+      return;
+    }
+
     // Check if user is on mobile and hasn't dismissed the banner
     const isDismissed =
       localStorage.getItem("debtguardian-app-banner-dismissed") === "true";
