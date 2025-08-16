@@ -1,6 +1,95 @@
-# 📱 DebtGuardian Cross-Platform Mobile## 📁 Project Structure
+# 📱 DebtGuardian Mobile App
+
+Native mobile app for iOS and Android built with React Native WebView.
+
+## 🎯 Overview
+
+This directory contains a complete React Native project that wraps the DebtGuardian web app in a native mobile container. The app provides a native mobile experience while leveraging the existing web application.
+
+**Key Features:**
+- Cross-platform (iOS & Android)
+- WebView-based architecture
+- Native app detection (hides download prompts when running in native app)
+- Production-ready APK builds included
+
+## 📁 Structure
 
 ```
+mobile-app/
+├── DebtGuardianApp/              # Complete React Native project
+│   ├── App.tsx                   # Main component with WebView + native detection
+│   ├── android/                  # Android build configuration
+│   ├── ios/                      # iOS build configuration  
+│   └── package.json              # Dependencies
+├── releases/                     # Pre-built APK files
+│   ├── DebtGuardian-v1.0.0-release.apk (46MB)
+│   └── DebtGuardian-v1.0.0-debug.apk (100MB)
+└── build-apk.sh                  # Build script
+```
+
+## 🚀 Quick Start
+
+### Option 1: Use Pre-built APKs (Recommended)
+
+```bash
+# Download and install the release APK
+# Files are in releases/ folder
+```
+
+### Option 2: Build from Source
+
+```bash
+cd DebtGuardianApp
+npm install
+cd android && ./gradlew assembleRelease
+```
+
+## 🔧 Development
+
+### Requirements
+- Node.js 18+
+- Android Studio (for Android builds)
+- Xcode (for iOS builds, Mac only)
+
+### Setup
+```bash
+cd DebtGuardianApp
+npm install
+
+# For Android
+cd android && ./gradlew assembleDebug
+
+# For iOS (Mac only)  
+cd ios && pod install
+npx react-native run-ios
+```
+
+## 📋 App Details
+
+- **Package Name:** com.debtguardian.app
+- **Web URL:** https://debtguardian.onrender.com
+- **Version:** 1.0.0
+- **Native Features:** 
+  - Auto-detection when running in native app
+  - Hides web download prompts appropriately
+  - Native status bar styling
+
+## 🎯 Architecture
+
+The app uses a simple but effective WebView approach:
+
+1. **React Native Shell:** Provides native app container
+2. **WebView Component:** Loads the web application  
+3. **JavaScript Injection:** Sets native app detection flag
+4. **Web App Integration:** Conditionally shows/hides download UI
+
+This approach allows leveraging the full web application while providing a native mobile experience.
+
+---
+
+*Ready-to-use APK files are available in the `releases/` folder.*oss-Platform Mobile## 📁 Project Structure
+
+````
 mobile-app/
 ├── 🚀 setup-react-native.sh     # Auto-setup script
 ├── 🍎 setup-ios.sh              # iOS-specific setup
@@ -20,10 +109,10 @@ mobile-app/
 
 ## 🎯 Why React Native?
 
-✅ **Single Codebase** for iOS + Android  
-✅ **Familiar Technology** (React + JavaScript)  
-✅ **Great Performance** and native feel  
-✅ **Large Community** and extensive ecosystem  
+✅ **Single Codebase** for iOS + Android
+✅ **Familiar Technology** (React + JavaScript)
+✅ **Great Performance** and native feel
+✅ **Large Community** and extensive ecosystem
 ✅ **Easy Updates** and maintenance
 
 ## 🚀 Quick Start
@@ -33,7 +122,7 @@ mobile-app/
 ```bash
 cd mobile-app
 ./setup-react-native.sh
-```
+````
 
 ### **Manual Setup:**
 
