@@ -113,7 +113,7 @@ export default function Landing() {
           </div>
         </div>
       </main>
-      
+
       {/* Mobile App Download Banner */}
       <MobileAppBanner />
     </div>

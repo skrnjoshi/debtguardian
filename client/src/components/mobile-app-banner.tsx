@@ -13,12 +13,15 @@ export function MobileAppBanner() {
 
   useEffect(() => {
     // Check if user is on mobile and hasn't dismissed the banner
-    const isDismissed = localStorage.getItem('debtguardian-app-banner-dismissed') === 'true';
-    
+    const isDismissed =
+      localStorage.getItem("debtguardian-app-banner-dismissed") === "true";
+
     // Check if already installed as PWA
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isStandalone = window.matchMedia(
+      "(display-mode: standalone)"
+    ).matches;
     const isIOSStandalone = (window.navigator as any).standalone === true;
-    
+
     if (isMobile && !isDismissed && !isStandalone && !isIOSStandalone) {
       // Show banner after a short delay
       const timer = setTimeout(() => {
@@ -34,25 +37,28 @@ export function MobileAppBanner() {
       setCanInstallPWA(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
     };
   }, [isMobile]);
 
   const handleDismiss = () => {
     setShowBanner(false);
     setDismissed(true);
-    localStorage.setItem('debtguardian-app-banner-dismissed', 'true');
+    localStorage.setItem("debtguardian-app-banner-dismissed", "true");
   };
 
   const handleInstallPWA = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      
-      if (outcome === 'accepted') {
+
+      if (outcome === "accepted") {
         setDeferredPrompt(null);
         setCanInstallPWA(false);
         handleDismiss();
@@ -83,7 +89,7 @@ export function MobileAppBanner() {
 • Enhanced offline capabilities
 
 Stay tuned for the official app launch!`;
-      
+
       alert(appInfo);
     }
   };
@@ -91,15 +97,18 @@ Stay tuned for the official app launch!`;
   const addToHomeScreen = () => {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const isAndroid = /Android/.test(navigator.userAgent);
-    
+
     let instructions = "";
-    
+
     if (isIOS) {
-      instructions = "1. Tap the Share button (⬆️) in Safari\n2. Scroll down and tap 'Add to Home Screen'\n3. Tap 'Add' to confirm";
+      instructions =
+        "1. Tap the Share button (⬆️) in Safari\n2. Scroll down and tap 'Add to Home Screen'\n3. Tap 'Add' to confirm";
     } else if (isAndroid) {
-      instructions = "1. Tap the menu (⋮) in your browser\n2. Tap 'Add to Home Screen' or 'Install App'\n3. Tap 'Add' to confirm";
+      instructions =
+        "1. Tap the menu (⋮) in your browser\n2. Tap 'Add to Home Screen' or 'Install App'\n3. Tap 'Add' to confirm";
     } else {
-      instructions = "1. Open browser menu\n2. Look for 'Add to Home Screen' or 'Install'\n3. Follow the prompts";
+      instructions =
+        "1. Open browser menu\n2. Look for 'Add to Home Screen' or 'Install'\n3. Follow the prompts";
     }
 
     const pwaInfo = `📱 Add DebtGuardian to Home Screen
@@ -115,7 +124,7 @@ ${instructions}
 🔗 URL: https://debtguardian.onrender.com/`;
 
     alert(pwaInfo);
-    
+
     // Auto-dismiss after showing instructions
     setTimeout(() => {
       handleDismiss();
@@ -139,8 +148,8 @@ ${instructions}
                 📱 Get the DebtGuardian App
               </h3>
               <p className="text-xs text-gray-600 mb-3 leading-relaxed">
-                {canInstallPWA 
-                  ? "Install for better performance, offline access, and app-like experience" 
+                {canInstallPWA
+                  ? "Install for better performance, offline access, and app-like experience"
                   : "Add to home screen for quick access and offline capabilities"}
               </p>
               <div className="flex space-x-2">
@@ -164,7 +173,7 @@ ${instructions}
                 <Button
                   onClick={addToHomeScreen}
                   variant="outline"
-                  size="sm" 
+                  size="sm"
                   className="text-xs h-8 border-blue-300 text-blue-700 hover:bg-blue-50"
                 >
                   <Plus className="w-3 h-3 mr-1" />

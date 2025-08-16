@@ -297,7 +297,7 @@ export default function Dashboard() {
         onClose={() => setShowProfileSettings(false)}
         onProfileUpdated={handleProfileUpdated}
       />
-      
+
       {/* Mobile App Download Banner */}
       <MobileAppBanner />
     </div>
