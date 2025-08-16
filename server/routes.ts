@@ -565,14 +565,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ? new Date(req.body.paymentDate)
           : req.body.paymentDate;
 
-      const paymentData = insertPaymentSchema.parse({
+      const paymentData = {
         userId,
         loanId: req.body.loanId,
         amount: parsedAmount.toString(),
         paymentDate: parsedDate,
         paymentType: req.body.paymentType || "emi",
         notes: req.body.notes || null,
-      });
+      };
 
       console.log("Creating payment:", paymentData);
 
