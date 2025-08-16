@@ -1,33 +1,71 @@
 # DebtGuardian 💳
 
-A professional debt and loan management application built with React, TypeScript, and Node.js. Track your loans, payments, and financial health with an intuitive dashboard.
+A professional debt and loan management application built with React, TypeScript, and Node.js.
 
-![DebtGuardian Dashboard](https://img.shields.io/badge/Status-Production%20Ready-green)
-![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)
-![React](https://img.shields.io/badge/React-18.x-61dafb)
-![Node.js](https://img.shields.io/badge/Node.js-20.x-339933)
-![Mobile App](https://img.shields.io/badge/Mobile-Android%20APK-brightgreen)
-![React Native](https://img.shields.io/badge/React%20Native-0.81-blue)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-green)
+![TypeScript](https://img.shields.io/badge/TypeScript-React-blue)
+![Mobile](https://img.shields.io/badge/Mobile-Android%20APK-brightgreen)
 
 ## 🌐 Live Application
 
 - **Web App**: [https://debtguardian.onrender.com](https://debtguardian.onrender.com)
-- **Mobile App**: Download APK from [releases](./mobile-app/releases/)
-- **PWA**: Installable Progressive Web App
+- **Mobile App**: Download APK from [mobile-app/releases/](./mobile-app/releases/)
 
 ## ✨ Features
 
-- **🏦 Loan Management**: Track multiple loans with detailed information
-- **📊 Financial Analytics**: Real-time financial health insights
-- **💰 Payment Tracking**: Monitor payment history and progress
-- **📱 Multi-Platform**: Web, Mobile App (Android), and PWA support
-- **🔐 Secure Authentication**: JWT-based user authentication
-- **🎯 Progress Visualization**: Visual loan progress bars and charts
-- **💸 Payoff Calculator**: Calculate loan payoff scenarios
-- **📈 Dashboard Overview**: Comprehensive financial overview
-- **📲 Native Mobile**: React Native Android app with WebView integration
+- 🏦 **Loan Management** - Track multiple loans with detailed analytics
+- 📊 **Financial Dashboard** - Real-time financial health insights  
+- 💰 **Payment Tracking** - Monitor payment history and progress
+- 📱 **Multi-Platform** - Web app + Native Android APK
+- 🔐 **Secure Authentication** - JWT-based user system
+- 💸 **Payoff Calculator** - Calculate loan payoff scenarios
+
+## 🚀 Quick Start
+
+### Development
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Production Build
+```bash
+# Build for production
+npm run build
+```
+
+## 📁 Project Structure
+
+```
+DebtGuardian/
+├── client/          # React frontend application
+├── server/          # Node.js backend API
+├── shared/          # Shared TypeScript schemas
+├── mobile-app/      # React Native mobile app
+└── README.md        # This file
+```
+
+## 🛠 Tech Stack
+
+- **Frontend**: React 18, TypeScript, Tailwind CSS, Vite
+- **Backend**: Node.js, Express, PostgreSQL, JWT
+- **Mobile**: React Native, Android APK
+- **Deployment**: Render (web), Direct APK (mobile)
 
 ## 📱 Mobile App
+
+The mobile app provides a native Android experience using React Native WebView:
+
+- **Location**: `mobile-app/DebtGuardianApp/`
+- **Downloads**: Pre-built APKs in `mobile-app/releases/`
+- **Features**: Native app detection, optimized mobile UI
+
+---
+
+*Ready to use! Visit the live app or download the mobile APK.*
 
 ### Android App Available Now!
 
