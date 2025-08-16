@@ -6,17 +6,39 @@ A professional debt and loan management application built with React, TypeScript
 ![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)
 ![React](https://img.shields.io/badge/React-18.x-61dafb)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-339933)
+![Mobile App](https://img.shields.io/badge/Mobile-Android%20APK-brightgreen)
+![React Native](https://img.shields.io/badge/React%20Native-0.81-blue)
+
+## 🌐 Live Application
+
+- **Web App**: [https://debtguardian.onrender.com](https://debtguardian.onrender.com)
+- **Mobile App**: Download APK from [releases](./mobile-app/releases/)
+- **PWA**: Installable Progressive Web App
 
 ## ✨ Features
 
 - **🏦 Loan Management**: Track multiple loans with detailed information
 - **📊 Financial Analytics**: Real-time financial health insights
 - **💰 Payment Tracking**: Monitor payment history and progress
-- **📱 Responsive Design**: Works on desktop, tablet, and mobile
+- **📱 Multi-Platform**: Web, Mobile App (Android), and PWA support
 - **🔐 Secure Authentication**: JWT-based user authentication
 - **🎯 Progress Visualization**: Visual loan progress bars and charts
 - **💸 Payoff Calculator**: Calculate loan payoff scenarios
 - **📈 Dashboard Overview**: Comprehensive financial overview
+- **📲 Native Mobile**: React Native Android app with WebView integration
+
+## 📱 Mobile App
+
+### Android App Available Now!
+- **Package**: `com.debtguardian.app`
+- **Size**: 46MB (Release APK)
+- **Features**: Full web app functionality in native container
+- **Installation**: Download from [mobile-app/releases/](./mobile-app/releases/)
+
+### Cross-Platform Ready
+- **React Native 0.81**: Modern cross-platform foundation
+- **iOS Ready**: Same codebase can build iOS version
+- **WebView Integration**: Seamless web app loading
 
 ## 🚀 Quick Start
 
