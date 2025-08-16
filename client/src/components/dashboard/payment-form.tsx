@@ -6,13 +6,28 @@ import { z } from "zod";
 import { format } from "date-fns";
 import { Check, DollarSign, Download, Calculator, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import { useLocation } from "wouter";
 
 const paymentSchema = z.object({
   loanId: z.string().min(1, "Please select a loan"),
@@ -33,6 +48,59 @@ interface PaymentFormProps {
 export function PaymentForm({ loans }: PaymentFormProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
+
+  // Export functionality
+  const exportRecords = async () => {
+    try {
+      // Get all payment history
+      const payments = await apiClient.get("/api/payments/history");
+      const analytics = await apiClient.get("/api/analytics/overview");
+
+      // Create CSV content
+      const csvContent = [
+        ["Date", "Loan Name", "Payment Type", "Amount", "Notes"].join(","),
+        ...payments.map((payment: any) =>
+          [
+            new Date(payment.paymentDate).toLocaleDateString(),
+            payment.loanName || "Unknown Loan",
+            payment.paymentType || "EMI",
+            payment.amount,
+            payment.notes || "",
+          ]
+            .map((field) => `"${field}"`)
+            .join(",")
+        ),
+      ].join("\n");
+
+      // Download the file
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute(
+        "download",
+        `loan_payments_${new Date().toISOString().split("T")[0]}.csv`
+      );
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast({
+        title: "Export Successful",
+        description: "Your payment records have been exported to CSV.",
+        variant: "default",
+      });
+    } catch (error) {
+      console.error("Export error:", error);
+      toast({
+        title: "Export Failed",
+        description: "Failed to export records. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const form = useForm<z.infer<typeof paymentSchema>>({
     resolver: zodResolver(paymentSchema),
@@ -47,7 +115,7 @@ export function PaymentForm({ loans }: PaymentFormProps) {
 
   const paymentMutation = useMutation({
     mutationFn: async (data: z.infer<typeof paymentSchema>) => {
-      await apiRequest("POST", "/api/payments", {
+      await apiClient.post("/api/payments", {
         ...data,
         amount: parseFloat(data.amount),
         paymentDate: new Date(data.paymentDate),
@@ -77,7 +145,7 @@ export function PaymentForm({ loans }: PaymentFormProps) {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/login";
         }, 500);
         return;
       }
@@ -97,30 +165,30 @@ export function PaymentForm({ loans }: PaymentFormProps) {
     <div className="space-y-6">
       {/* Quick Actions */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Quick Actions
+        </h3>
         <div className="space-y-3">
-          <Button 
+          <Button
             className="w-full bg-primary text-white hover:bg-blue-800"
-            onClick={() => document.getElementById('payment-form')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() =>
+              document
+                .getElementById("payment-form")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
           >
             <DollarSign className="w-4 h-4 mr-2" />
             Make Payment
           </Button>
-          <Button variant="outline" className="w-full" onClick={() => {
-            toast({
-              title: "Coming Soon",
-              description: "Export functionality will be available in the next update.",
-            });
-          }}>
+          <Button variant="outline" className="w-full" onClick={exportRecords}>
             <Download className="w-4 h-4 mr-2" />
             Export Records
           </Button>
-          <Button variant="outline" className="w-full" onClick={() => {
-            toast({
-              title: "Coming Soon", 
-              description: "Payoff calculator will be available in the next update.",
-            });
-          }}>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => setLocation("/payoff-calculator")}
+          >
             <Calculator className="w-4 h-4 mr-2" />
             Payoff Calculator
           </Button>
@@ -128,8 +196,13 @@ export function PaymentForm({ loans }: PaymentFormProps) {
       </div>
 
       {/* Payment Form */}
-      <div id="payment-form" className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Log Payment</h3>
+      <div
+        id="payment-form"
+        className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+      >
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Log Payment
+        </h3>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -138,7 +211,10 @@ export function PaymentForm({ loans }: PaymentFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Select Loan</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Choose a loan..." />
@@ -165,7 +241,9 @@ export function PaymentForm({ loans }: PaymentFormProps) {
                   <FormLabel>Payment Amount</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-2 text-gray-500">₹</span>
+                      <span className="absolute left-3 top-2 text-gray-500">
+                        ₹
+                      </span>
                       <Input
                         type="number"
                         placeholder="0"
@@ -199,7 +277,10 @@ export function PaymentForm({ loans }: PaymentFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Payment Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue />

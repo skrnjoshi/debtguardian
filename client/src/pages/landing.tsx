@@ -11,9 +11,12 @@ export default function Landing() {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
               <ChartLine className="text-primary text-2xl" />
-              <h1 className="text-xl font-bold text-gray-900">Loan Manager Pro</h1>
+              <h1 className="text-xl font-bold text-gray-900">DebtGuardian</h1>
             </div>
-            <Button onClick={() => window.location.href = '/api/login'} className="bg-primary hover:bg-blue-800">
+            <Button
+              onClick={() => (window.location.href = "/login")}
+              className="bg-primary hover:bg-blue-800"
+            >
               Sign In
             </Button>
           </div>
@@ -24,15 +27,15 @@ export default function Landing() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            Take Control of Your Loans
+            Take Control of Your Debt with DebtGuardian
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Comprehensive loan management with payment tracking, automated calculations, 
-            and financial analytics. Optimize your debt strategy with Indian rupee formatting 
-            and personalized insights.
+            Comprehensive loan management with payment tracking, automated
+            calculations, and financial analytics. Achieve financial freedom
+            with professional-grade debt management tools.
           </p>
-          <Button 
-            onClick={() => window.location.href = '/api/login'}
+          <Button
+            onClick={() => (window.location.href = "/login")}
             className="bg-primary hover:bg-blue-800 text-lg px-8 py-3"
           >
             Get Started Free
@@ -48,8 +51,8 @@ export default function Landing() {
                 Loan Portfolio Management
               </h3>
               <p className="text-gray-600">
-                Track all your loans in one place with outstanding balances, EMIs, 
-                and interest rates sorted by priority.
+                Track all your loans in one place with outstanding balances,
+                EMIs, and interest rates sorted by priority.
               </p>
             </CardContent>
           </Card>
@@ -61,7 +64,7 @@ export default function Landing() {
                 Payment Tracking
               </h3>
               <p className="text-gray-600">
-                Log payments with automatic balance updates and comprehensive 
+                Log payments with automatic balance updates and comprehensive
                 payment history with notes and categorization.
               </p>
             </CardContent>
@@ -74,7 +77,7 @@ export default function Landing() {
                 Financial Analytics
               </h3>
               <p className="text-gray-600">
-                Visual charts, debt payoff projections, and financial health 
+                Visual charts, debt payoff projections, and financial health
                 scoring to optimize your repayment strategy.
               </p>
             </CardContent>
@@ -87,15 +90,24 @@ export default function Landing() {
             Ready to Master Your Finances?
           </h3>
           <p className="text-gray-600 mb-6">
-            Join thousands of users who have taken control of their debt with our 
-            comprehensive loan management platform.
+            Join thousands of users who have taken control of their debt with
+            our comprehensive loan management platform.
           </p>
-          <Button 
-            onClick={() => window.location.href = '/api/login'}
-            className="bg-primary hover:bg-blue-800 text-lg px-8 py-3"
-          >
-            Start Managing Your Loans
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              onClick={() => (window.location.href = "/signup")}
+              className="bg-primary hover:bg-blue-800 text-lg px-8 py-3"
+            >
+              Create Account
+            </Button>
+            <Button
+              onClick={() => (window.location.href = "/login")}
+              variant="outline"
+              className="text-lg px-8 py-3"
+            >
+              Sign In
+            </Button>
+          </div>
         </div>
       </main>
     </div>

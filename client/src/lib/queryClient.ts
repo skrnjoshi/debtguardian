@@ -10,7 +10,7 @@ async function throwIfResNotOk(res: Response) {
 export async function apiRequest(
   method: string,
   url: string,
-  data?: unknown | undefined,
+  data?: unknown | undefined
 ): Promise<Response> {
   const res = await fetch(url, {
     method,
@@ -47,11 +47,25 @@ export const queryClient = new QueryClient({
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
+      staleTime: 30 * 1000, // 30 seconds cache time - shorter for immediate updates
+      gcTime: 5 * 60 * 1000, // 5 minutes garbage collection time
+      retry: (failureCount, error) => {
+        // Only retry on network errors, not HTTP errors
+        return failureCount < 3 && !error.message.includes(":");
+      },
+      // Enhanced performance settings for immediate UI updates
+      refetchOnMount: true, // Always refetch on mount for fresh data
+      refetchOnReconnect: "always", // Refetch when reconnecting
+      networkMode: "online", // Only run queries when online
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
     },
     mutations: {
       retry: false,
+      // Enhanced error handling for mutations
+      networkMode: "online",
+      onError: (error) => {
+        console.error("Mutation error:", error);
+      },
     },
   },
 });

@@ -10,12 +10,46 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { formatCurrency } from "@/lib/currency";
+import { apiClient } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { Link, useLocation } from "wouter";
+
+interface Loan {
+  id: string;
+  name: string;
+  loanType: string;
+  originalAmount: string;
+  outstandingAmount: string;
+  emiAmount: string;
+  interestRate: string;
+  remainingMonths: number;
+  nextDueDate: string;
+}
+
+interface Payment {
+  id: string;
+  amount: string;
+  paymentDate: string;
+  paymentType: string;
+  notes?: string;
+}
 
 const editLoanSchema = z.object({
   name: z.string().min(1, "Loan name is required"),
@@ -27,8 +61,8 @@ const editLoanSchema = z.object({
 
 export default function LoanDetails() {
   const [location] = useLocation();
-  const loanId = location.split('/')[2]; // Extract loan ID from URL
-  
+  const loanId = location.split("/")[2]; // Extract loan ID from URL
+
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -43,25 +77,27 @@ export default function LoanDetails() {
         variant: "destructive",
       });
       setTimeout(() => {
-        window.location.href = "/api/login";
+        window.location.href = "/login";
       }, 500);
       return;
     }
   }, [isAuthenticated, isLoading, toast]);
 
   // Fetch loans
-  const { data: loans = [] } = useQuery({
+  const { data: loans = [] } = useQuery<Loan[]>({
     queryKey: ["/api/loans"],
+    queryFn: () => apiClient.get("/api/loans"),
     enabled: isAuthenticated,
   });
 
   // Fetch loan payments
-  const { data: loanPayments = [] } = useQuery({
+  const { data: loanPayments = [] } = useQuery<Payment[]>({
     queryKey: ["/api/payments/loan", loanId],
+    queryFn: () => apiClient.get(`/api/payments/loan/${loanId}`),
     enabled: isAuthenticated && !!loanId,
   });
 
-  const loan = loans.find((l: any) => l.id === loanId);
+  const loan = loans.find((l: Loan) => l.id === loanId);
 
   const form = useForm<z.infer<typeof editLoanSchema>>({
     resolver: zodResolver(editLoanSchema),
@@ -89,7 +125,7 @@ export default function LoanDetails() {
 
   const updateLoanMutation = useMutation({
     mutationFn: async (data: z.infer<typeof editLoanSchema>) => {
-      await apiRequest("PUT", `/api/loans/${loanId}`, {
+      await apiClient.put(`/api/loans/${loanId}`, {
         ...data,
         emiAmount: parseFloat(data.emiAmount),
         interestRate: parseFloat(data.interestRate),
@@ -113,7 +149,7 @@ export default function LoanDetails() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/login";
         }, 500);
         return;
       }
@@ -148,7 +184,9 @@ export default function LoanDetails() {
             <div className="flex justify-between items-center py-4">
               <div className="flex items-center space-x-3">
                 <ChartLine className="text-primary text-2xl" />
-                <h1 className="text-xl font-bold text-gray-900">Loan Details</h1>
+                <h1 className="text-xl font-bold text-gray-900">
+                  Loan Details
+                </h1>
               </div>
               <Link href="/">
                 <Button variant="outline" size="sm">
@@ -168,7 +206,10 @@ export default function LoanDetails() {
     );
   }
 
-  const progressPercent = ((parseFloat(loan.originalAmount) - parseFloat(loan.outstandingAmount)) / parseFloat(loan.originalAmount)) * 100;
+  const progressPercent =
+    ((parseFloat(loan.originalAmount) - parseFloat(loan.outstandingAmount)) /
+      parseFloat(loan.originalAmount)) *
+    100;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -220,7 +261,10 @@ export default function LoanDetails() {
               <CardContent>
                 {isEditing ? (
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-4"
+                    >
                       <FormField
                         control={form.control}
                         name="name"
@@ -241,18 +285,29 @@ export default function LoanDetails() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Loan Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
                               <FormControl>
                                 <SelectTrigger>
                                   <SelectValue />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="personal">Personal Loan</SelectItem>
-                                <SelectItem value="credit_card">Credit Card</SelectItem>
-                                <SelectItem value="vehicle">Vehicle Loan</SelectItem>
+                                <SelectItem value="personal">
+                                  Personal Loan
+                                </SelectItem>
+                                <SelectItem value="credit_card">
+                                  Credit Card
+                                </SelectItem>
+                                <SelectItem value="vehicle">
+                                  Vehicle Loan
+                                </SelectItem>
                                 <SelectItem value="home">Home Loan</SelectItem>
-                                <SelectItem value="business">Business Loan</SelectItem>
+                                <SelectItem value="business">
+                                  Business Loan
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -269,8 +324,14 @@ export default function LoanDetails() {
                               <FormLabel>EMI Amount</FormLabel>
                               <FormControl>
                                 <div className="relative">
-                                  <span className="absolute left-3 top-2 text-gray-500">₹</span>
-                                  <Input type="number" className="pl-8" {...field} />
+                                  <span className="absolute left-3 top-2 text-gray-500">
+                                    ₹
+                                  </span>
+                                  <Input
+                                    type="number"
+                                    className="pl-8"
+                                    {...field}
+                                  />
                                 </div>
                               </FormControl>
                               <FormMessage />
@@ -287,7 +348,9 @@ export default function LoanDetails() {
                               <FormControl>
                                 <div className="relative">
                                   <Input type="number" step="0.01" {...field} />
-                                  <span className="absolute right-3 top-2 text-gray-500">%</span>
+                                  <span className="absolute right-3 top-2 text-gray-500">
+                                    %
+                                  </span>
                                 </div>
                               </FormControl>
                               <FormMessage />
@@ -333,13 +396,17 @@ export default function LoanDetails() {
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-sm text-gray-600">Outstanding Amount</Label>
+                        <Label className="text-sm text-gray-600">
+                          Outstanding Amount
+                        </Label>
                         <p className="text-2xl font-bold text-gray-900">
                           {formatCurrency(parseFloat(loan.outstandingAmount))}
                         </p>
                       </div>
                       <div>
-                        <Label className="text-sm text-gray-600">Original Amount</Label>
+                        <Label className="text-sm text-gray-600">
+                          Original Amount
+                        </Label>
                         <p className="text-lg font-semibold text-gray-700">
                           {formatCurrency(parseFloat(loan.originalAmount))}
                         </p>
@@ -348,26 +415,38 @@ export default function LoanDetails() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-sm text-gray-600">Monthly EMI</Label>
+                        <Label className="text-sm text-gray-600">
+                          Monthly EMI
+                        </Label>
                         <p className="text-lg font-semibold text-gray-900">
                           {formatCurrency(parseFloat(loan.emiAmount))}
                         </p>
                       </div>
                       <div>
-                        <Label className="text-sm text-gray-600">Interest Rate</Label>
-                        <p className="text-lg font-semibold text-gray-900">{loan.interestRate}%</p>
+                        <Label className="text-sm text-gray-600">
+                          Interest Rate
+                        </Label>
+                        <p className="text-lg font-semibold text-gray-900">
+                          {loan.interestRate}%
+                        </p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-sm text-gray-600">Remaining Months</Label>
-                        <p className="text-lg font-semibold text-gray-900">{loan.remainingMonths}</p>
+                        <Label className="text-sm text-gray-600">
+                          Remaining Months
+                        </Label>
+                        <p className="text-lg font-semibold text-gray-900">
+                          {loan.remainingMonths}
+                        </p>
                       </div>
                       <div>
-                        <Label className="text-sm text-gray-600">Loan Type</Label>
+                        <Label className="text-sm text-gray-600">
+                          Loan Type
+                        </Label>
                         <p className="text-lg font-semibold text-gray-900 capitalize">
-                          {loan.loanType.replace('_', ' ')}
+                          {loan.loanType.replace("_", " ")}
                         </p>
                       </div>
                     </div>
@@ -381,7 +460,9 @@ export default function LoanDetails() {
                       <div className="w-full bg-gray-200 rounded-full h-3">
                         <div
                           className="bg-green-600 h-3 rounded-full transition-all duration-300"
-                          style={{ width: `${Math.min(progressPercent, 100)}%` }}
+                          style={{
+                            width: `${Math.min(progressPercent, 100)}%`,
+                          }}
                         ></div>
                       </div>
                     </div>
@@ -401,19 +482,28 @@ export default function LoanDetails() {
                 <div className="flex justify-between">
                   <span className="text-gray-600">Monthly Interest</span>
                   <span className="font-semibold">
-                    {formatCurrency((parseFloat(loan.outstandingAmount) * parseFloat(loan.interestRate)) / (12 * 100))}
+                    {formatCurrency(
+                      (parseFloat(loan.outstandingAmount) *
+                        parseFloat(loan.interestRate)) /
+                        (12 * 100)
+                    )}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Principal Paid</span>
                   <span className="font-semibold">
-                    {formatCurrency(parseFloat(loan.originalAmount) - parseFloat(loan.outstandingAmount))}
+                    {formatCurrency(
+                      parseFloat(loan.originalAmount) -
+                        parseFloat(loan.outstandingAmount)
+                    )}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Remaining</span>
                   <span className="font-semibold">
-                    {formatCurrency(parseFloat(loan.emiAmount) * loan.remainingMonths)}
+                    {formatCurrency(
+                      parseFloat(loan.emiAmount) * loan.remainingMonths
+                    )}
                   </span>
                 </div>
               </CardContent>
@@ -435,9 +525,7 @@ export default function LoanDetails() {
                   </Button>
                 </Link>
                 <Link href="/">
-                  <Button className="w-full">
-                    Make Payment
-                  </Button>
+                  <Button className="w-full">Make Payment</Button>
                 </Link>
               </CardContent>
             </Card>

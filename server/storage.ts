@@ -1,33 +1,36 @@
-import {
-  users,
-  loans,
-  payments,
-  type User,
-  type UpsertUser,
-  type Loan,
-  type InsertLoan,
-  type Payment,
-  type InsertPayment,
-} from "@shared/schema";
-import { db } from "./db";
+import { db, currentSchema } from "./db";
 import { eq, desc, and } from "drizzle-orm";
 
+// Extract schema objects
+const { users, loans, payments } = currentSchema;
+
+// Types - use the SQLite schema types for consistency
+export type User = typeof users.$inferSelect;
+export type UpsertUser = typeof users.$inferInsert;
+export type Loan = typeof loans.$inferSelect;
+export type InsertLoan = typeof loans.$inferInsert;
+export type Payment = typeof payments.$inferSelect;
+export type InsertPayment = typeof payments.$inferInsert;
+
 export interface IStorage {
-  // User operations (mandatory for Replit Auth)
+  // User operations
   getUser(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
-  
+  updateUserProfile(userId: string, updates: Partial<User>): Promise<User>;
+  validatePassword(email: string, password: string): Promise<User | null>;
+
   // Loan operations
   getUserLoans(userId: string): Promise<Loan[]>;
   createLoan(loan: InsertLoan): Promise<Loan>;
   updateLoan(id: string, updates: Partial<Loan>): Promise<Loan>;
   getLoan(id: string): Promise<Loan | undefined>;
-  
+
   // Payment operations
   createPayment(payment: InsertPayment): Promise<Payment>;
   getUserPayments(userId: string, limit?: number): Promise<Payment[]>;
   getLoanPayments(userId: string, loanId: string): Promise<Payment[]>;
-  
+
   // Initialize user with default loans
   initializeUserLoans(userId: string): Promise<void>;
 }
@@ -37,6 +40,25 @@ export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async validatePassword(
+    email: string,
+    password: string
+  ): Promise<User | null> {
+    const user = await this.getUserByEmail(email);
+    if (!user || !user.password) {
+      return null;
+    }
+
+    const bcrypt = await import("bcryptjs");
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    return isPasswordValid ? user : null;
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
@@ -54,6 +76,21 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
+  async updateUserProfile(
+    userId: string,
+    updates: Partial<User>
+  ): Promise<User> {
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return updatedUser;
+  }
+
   // Loan operations
   async getUserLoans(userId: string): Promise<Loan[]> {
     return await db
@@ -64,8 +101,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createLoan(loan: InsertLoan): Promise<Loan> {
-    const [newLoan] = await db.insert(loans).values(loan).returning();
-    return newLoan;
+    console.log("🏗️ Creating loan with data:", loan);
+    try {
+      const [newLoan] = await db.insert(loans).values(loan).returning();
+      console.log("✅ Loan created successfully:", newLoan);
+      return newLoan;
+    } catch (error) {
+      console.error("❌ Error creating loan:", error);
+      throw error;
+    }
   }
 
   async updateLoan(id: string, updates: Partial<Loan>): Promise<Loan> {
@@ -82,21 +126,39 @@ export class DatabaseStorage implements IStorage {
     return loan;
   }
 
-  async updateLoanDetails(loanId: string, userId: string, updates: {
-    name: string;
-    loanType: string;
-    emiAmount: string;
-    interestRate: string;
-    remainingMonths: number;
-  }): Promise<Loan> {
+  async updateLoanDetails(
+    loanId: string,
+    userId: string,
+    updates: {
+      name: string;
+      loanType: string;
+      emiAmount: string;
+      interestRate: string;
+      remainingMonths: number;
+    }
+  ): Promise<Loan> {
+    console.log(`[STORAGE] 📝 Updating loan ${loanId} for user ${userId}`);
+    console.log(`[STORAGE] 📊 Original updates:`, updates);
+
+    // Use PostgreSQL schema field names
+    const mappedUpdates = {
+      name: updates.name,
+      loanType: updates.loanType,
+      emiAmount: updates.emiAmount, // Keep same name as PostgreSQL schema
+      interestRate: parseFloat(updates.interestRate),
+      remainingMonths: updates.remainingMonths, // Keep same name as PostgreSQL schema
+      updatedAt: new Date(),
+    };
+
+    console.log(`[STORAGE] 🔄 Mapped updates for PostgreSQL:`, mappedUpdates);
+
     const [loan] = await db
       .update(loans)
-      .set({
-        ...updates,
-        updatedAt: new Date(),
-      })
+      .set(mappedUpdates)
       .where(and(eq(loans.id, loanId), eq(loans.userId, userId)))
       .returning();
+
+    console.log(`[STORAGE] ✅ Updated loan result:`, loan);
     return loan;
   }
 
@@ -123,104 +185,52 @@ export class DatabaseStorage implements IStorage {
       .limit(limit);
   }
 
+  // Flexible loan update method for closing loans
+  async updateLoanPartial(
+    loanId: string,
+    userId: string,
+    updates: Partial<{
+      outstandingAmount: number; // Use PostgreSQL field name
+      remainingMonths: number; // Use PostgreSQL field name
+      name: string;
+      loanType: string;
+      emiAmount: number; // Use PostgreSQL field name
+      interestRate: number;
+    }>
+  ): Promise<Loan> {
+    console.log(`[STORAGE] 🔄 Partial update for loan ${loanId}:`, updates);
 
+    const [loan] = await db
+      .update(loans)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(loans.id, loanId), eq(loans.userId, userId)))
+      .returning();
 
-  // Initialize user with default loans based on the provided data
+    console.log(`[STORAGE] ✅ Partial update result:`, loan);
+    return loan;
+  }
+
+  // Delete loan method
+  async deleteLoan(loanId: string, userId: string): Promise<void> {
+    // First delete all payments for this loan
+    await db
+      .delete(payments)
+      .where(and(eq(payments.loanId, loanId), eq(payments.userId, userId)));
+
+    // Then delete the loan itself
+    await db
+      .delete(loans)
+      .where(and(eq(loans.id, loanId), eq(loans.userId, userId)));
+  }
+
+  // Initialize user with no default loans - users start with a clean slate
   async initializeUserLoans(userId: string): Promise<void> {
-    const defaultLoans = [
-      {
-        userId,
-        name: "Credit Card 1",
-        loanType: "credit_card",
-        originalAmount: "250000.00",
-        outstandingAmount: "193221.00",
-        emiAmount: "10853.00",
-        interestRate: "13.00",
-        remainingMonths: 19,
-        nextDueDate: new Date("2025-01-15"),
-      },
-      {
-        userId,
-        name: "Credit Card 2",
-        loanType: "credit_card", 
-        originalAmount: "120000.00",
-        outstandingAmount: "81560.00",
-        emiAmount: "2396.00",
-        interestRate: "18.00",
-        remainingMonths: 48,
-        nextDueDate: new Date("2025-01-20"),
-      },
-      {
-        userId,
-        name: "Credit Card 3",
-        loanType: "credit_card",
-        originalAmount: "450000.00",
-        outstandingAmount: "300913.00",
-        emiAmount: "10142.00",
-        interestRate: "18.00",
-        remainingMonths: 37,
-        nextDueDate: new Date("2025-01-18"),
-      },
-      {
-        userId,
-        name: "Credit Card 4",
-        loanType: "credit_card",
-        originalAmount: "35000.00",
-        outstandingAmount: "17745.00",
-        emiAmount: "2354.00",
-        interestRate: "0.00",
-        remainingMonths: 8,
-        nextDueDate: new Date("2025-01-10"),
-      },
-      {
-        userId,
-        name: "Fibe",
-        loanType: "personal",
-        originalAmount: "250000.00",
-        outstandingAmount: "143978.00",
-        emiAmount: "11181.00",
-        interestRate: "33.00",
-        remainingMonths: 15,
-        nextDueDate: new Date("2025-01-25"),
-      },
-      {
-        userId,
-        name: "Moneyview",
-        loanType: "personal",
-        originalAmount: "150000.00",
-        outstandingAmount: "61468.00",
-        emiAmount: "6169.00",
-        interestRate: "33.00",
-        remainingMonths: 12,
-        nextDueDate: new Date("2025-01-22"),
-      },
-      {
-        userId,
-        name: "L&T Finance",
-        loanType: "personal",
-        originalAmount: "500000.00",
-        outstandingAmount: "359616.00",
-        emiAmount: "11806.00",
-        interestRate: "18.00",
-        remainingMonths: 41,
-        nextDueDate: new Date("2025-01-28"),
-      },
-      {
-        userId,
-        name: "Car Loan",
-        loanType: "vehicle",
-        originalAmount: "600000.00",
-        outstandingAmount: "368408.00",
-        emiAmount: "14585.00",
-        interestRate: "8.25",
-        remainingMonths: 41,
-        nextDueDate: new Date("2025-01-12"),
-      },
-    ];
-
-    for (const loan of defaultLoans) {
-      await this.createLoan(loan);
-    }
+    // No longer create default loans - let users add their own
+    // This prevents the confusion where all users appeared to have the same data
+    console.log(`🏠 User ${userId} initialized with empty loan portfolio`);
   }
 }
 

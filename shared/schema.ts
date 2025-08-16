@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { sql } from "drizzle-orm";
 import {
   index,
   jsonb,
@@ -13,7 +13,7 @@ import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// Session storage table for Replit Auth
+// User session storage table
 export const sessions = pgTable(
   "sessions",
   {
@@ -21,29 +21,63 @@ export const sessions = pgTable(
     sess: jsonb("sess").notNull(),
     expire: timestamp("expire").notNull(),
   },
-  (table) => [index("IDX_session_expire").on(table.expire)],
+  (table) => [index("IDX_session_expire").on(table.expire)]
 );
 
-// User storage table for Replit Auth
+// User storage table for JWT Auth
 export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  id: varchar("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
   email: varchar("email").unique(),
+  password: varchar("password"), // Added for JWT authentication
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
   salary: decimal("salary", { precision: 12, scale: 2 }).default("55000"),
+  // Basic expense fields for user profile customization
+  basicExpenseHousing: decimal("basic_expense_housing", {
+    precision: 12,
+    scale: 2,
+  }).default("5000"),
+  basicExpenseFood: decimal("basic_expense_food", {
+    precision: 12,
+    scale: 2,
+  }).default("3000"),
+  basicExpenseTransport: decimal("basic_expense_transport", {
+    precision: 12,
+    scale: 2,
+  }).default("2000"),
+  basicExpenseHealthcare: decimal("basic_expense_healthcare", {
+    precision: 12,
+    scale: 2,
+  }).default("1500"),
+  basicExpenseOther: decimal("basic_expense_other", {
+    precision: 12,
+    scale: 2,
+  }).default("1000"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Loans table
 export const loans = pgTable("loans", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  id: varchar("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
   name: varchar("name").notNull(),
   loanType: varchar("loan_type").notNull().default("personal"),
-  originalAmount: decimal("original_amount", { precision: 12, scale: 2 }).notNull(),
-  outstandingAmount: decimal("outstanding_amount", { precision: 12, scale: 2 }).notNull(),
+  originalAmount: decimal("original_amount", {
+    precision: 12,
+    scale: 2,
+  }).notNull(),
+  outstandingAmount: decimal("outstanding_amount", {
+    precision: 12,
+    scale: 2,
+  }).notNull(),
   emiAmount: decimal("emi_amount", { precision: 12, scale: 2 }).notNull(),
   interestRate: decimal("interest_rate", { precision: 5, scale: 2 }).notNull(),
   remainingMonths: integer("remaining_months").notNull(),
@@ -54,9 +88,15 @@ export const loans = pgTable("loans", {
 
 // Payments table
 export const payments = pgTable("payments", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  loanId: varchar("loan_id").notNull().references(() => loans.id, { onDelete: "cascade" }),
+  id: varchar("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  userId: varchar("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  loanId: varchar("loan_id")
+    .notNull()
+    .references(() => loans.id, { onDelete: "cascade" }),
   amount: decimal("amount", { precision: 12, scale: 2 }).notNull(),
   paymentDate: timestamp("payment_date").notNull(),
   paymentType: varchar("payment_type").notNull().default("emi"), // emi, extra, prepayment
@@ -102,20 +142,23 @@ export const insertLoanSchema = createInsertSchema(loans).omit({
   updatedAt: true,
 });
 
-export const insertPaymentSchema = createInsertSchema(payments).omit({
-  id: true,
-  createdAt: true,
-}).extend({
-  amount: z.union([z.string(), z.number()]).transform((val) => 
-    typeof val === 'string' ? parseFloat(val) : val
-  ),
-  paymentDate: z.union([z.string(), z.date()]).transform((val) => 
-    typeof val === 'string' ? new Date(val) : val
-  ),
-});
+export const insertPaymentSchema = createInsertSchema(payments)
+  .omit({
+    id: true,
+    createdAt: true,
+  })
+  .extend({
+    amount: z
+      .union([z.string(), z.number()])
+      .transform((val) => (typeof val === "string" ? parseFloat(val) : val)),
+    paymentDate: z
+      .union([z.string(), z.date()])
+      .transform((val) => (typeof val === "string" ? new Date(val) : val)),
+  });
 
 // Types
 export type UpsertUser = typeof users.$inferInsert;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertLoan = z.infer<typeof insertLoanSchema>;
 export type Loan = typeof loans.$inferSelect;
