@@ -159,14 +159,18 @@ export default function Landing() {
                       >
                         Download APK (46MB)
                       </Button>
-                      <p className="text-xs text-blue-200">Production Release</p>
+                      <p className="text-xs text-blue-200">
+                        Production Release
+                      </p>
                     </>
                   ) : (
                     <>
                       <div className="w-full py-3 px-4 bg-green-500/20 text-green-100 rounded border border-green-400/30">
                         ✅ Already Installed
                       </div>
-                      <p className="text-xs text-green-200">You're using the native app!</p>
+                      <p className="text-xs text-green-200">
+                        You're using the native app!
+                      </p>
                     </>
                   )}
                 </div>

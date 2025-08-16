@@ -14,10 +14,10 @@ export function MobileAppBanner() {
   useEffect(() => {
     // Check if running inside the native DebtGuardian app
     const isNativeApp = (window as any).isDebtGuardianNativeApp === true;
-    
+
     // Don't show banner if running in native app
     if (isNativeApp) {
-      console.log('Running in native app - hiding mobile banner');
+      console.log("Running in native app - hiding mobile banner");
       return;
     }
 

@@ -11,18 +11,18 @@ export function useIsNativeApp() {
     const checkNativeApp = () => {
       const isNative = (window as any).isDebtGuardianNativeApp === true;
       setIsNativeApp(isNative);
-      
+
       if (isNative) {
-        console.log('Detected DebtGuardian native app environment');
+        console.log("Detected DebtGuardian native app environment");
       }
     };
 
     // Check immediately
     checkNativeApp();
-    
+
     // Also check after a short delay in case the flag is set after initial load
     const timer = setTimeout(checkNativeApp, 100);
-    
+
     return () => clearTimeout(timer);
   }, []);
 

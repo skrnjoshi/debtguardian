@@ -1,6 +1,22 @@
-# 📱 DebtGuardian Cross-Platform Mobile App
+# 📱 DebtGuardian Cross-Platform Mobile## 📁 Project Structure
 
-Transform your web app into native mobile experiences for both iOS and Android using React Native!
+```
+mobile-app/
+├── 🚀 setup-react-native.sh     # Auto-setup script
+├── 🍎 setup-ios.sh              # iOS-specific setup
+├── 📖 CROSS_PLATFORM_GUIDE.md   # Detailed guide
+├── 📖 MOBILE_APP_GUIDE.md       # Original guide
+│
+├── ⚛️  DebtGuardianApp/          # Complete React Native project
+│   ├── App.tsx                   # Main app component with WebView
+│   ├── package.json              # Dependencies
+│   ├── android/                  # Android build files
+│   ├── ios/                      # iOS build files
+│   └── __tests__/                # Test files
+│
+├── 📦 releases/                  # Built APK files
+└── 📚 docs/                      # Documentation
+```r web app into native mobile experiences for both iOS and Android using React Native!
 
 ## 🎯 Why React Native?
 

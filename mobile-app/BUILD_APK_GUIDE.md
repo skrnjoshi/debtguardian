@@ -17,13 +17,13 @@ cd DebtGuardianApp
 npm install react-native-webview
 ```
 
-### **Step 2: Copy Our Pre-built Files**
+### **Step 2: Use Complete Project**
 
 ```bash
-# Copy the App.js and components we already created
-cp ../react-native/App.js ./
-cp -r ../react-native/src ./
-cp ../react-native/package.json ./package.json
+# The complete React Native project is already available in DebtGuardianApp/
+cd DebtGuardianApp/
+
+# Install dependencies if not already installed
 npm install
 ```
 
@@ -88,11 +88,9 @@ if [ ! -d "DebtGuardianApp" ]; then
     echo "Creating React Native project..."
     npx react-native init DebtGuardianApp --version latest
     cd DebtGuardianApp
-    npm install react-native-webview
+    npm install
 
-    # Copy our files
-    cp ../react-native/App.js ./
-    cp -r ../react-native/src ./
+    # Project files are already in place with App.tsx and WebView setup
 else
     cd DebtGuardianApp
 fi

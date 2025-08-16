@@ -34,7 +34,7 @@ export default function Downloads() {
         </div>
 
         {/* Download Cards */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Android APK Release - Hidden in native app */}
           {!isNativeApp ? (
             <Card className="hover:shadow-lg transition-shadow">
@@ -70,7 +70,9 @@ export default function Downloads() {
                 <div className="mx-auto w-16 h-16 bg-green-200 rounded-full flex items-center justify-center mb-4">
                   <Smartphone className="w-8 h-8 text-green-700" />
                 </div>
-                <CardTitle className="text-xl text-green-800">Android App (Release)</CardTitle>
+                <CardTitle className="text-xl text-green-800">
+                  Android App (Release)
+                </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-green-700 mb-4">
@@ -107,7 +109,9 @@ export default function Downloads() {
                   <p className="text-sm text-gray-500">Build: Debug</p>
                 </div>
                 <Button
-                  onClick={() => handleDownload("DebtGuardian-v1.0.0-debug.apk")}
+                  onClick={() =>
+                    handleDownload("DebtGuardian-v1.0.0-debug.apk")
+                  }
                   variant="outline"
                   className="w-full border-orange-300 text-orange-700 hover:bg-orange-50"
                 >
