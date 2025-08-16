@@ -1,53 +1,62 @@
-# DebtGuardian Mobile App
+# 📱 DebtGuardian Cross-Platform Mobile App
 
-This directory contains the mobile app versions that use WebView to display the DebtGuardian web application.
+Transform your web app into native mobile experiences for both iOS and Android using React Native!
+
+## 🎯 Why React Native?
+
+✅ **Single Codebase** for iOS + Android  
+✅ **Familiar Technology** (React + JavaScript)  
+✅ **Great Performance** and native feel  
+✅ **Large Community** and extensive ecosystem  
+✅ **Easy Updates** and maintenance
 
 ## 🚀 Quick Start
 
-### Android App (WebView)
+### **One-Command Setup:**
 
-The Android app loads `https://debtguardian.onrender.com/` in a WebView component, providing a native app experience.
+```bash
+cd mobile-app
+./setup-react-native.sh
+```
 
-### Features:
+### **Manual Setup:**
 
-- ✅ Full web app functionality through WebView
-- ✅ Native app icon and splash screen
-- ✅ Hide browser UI for app-like experience
-- ✅ Handle back button navigation
-- ✅ Network connectivity detection
-- ✅ Push notifications support (future)
-- ✅ Biometric authentication (future)
+```bash
+# Create React Native project
+npx react-native init DebtGuardianApp
+cd DebtGuardianApp
 
-## 📁 Directory Structure
+# Install WebView
+npm install react-native-webview
+
+# iOS setup (Mac only)
+cd ios && pod install && cd ..
+
+# Run on platforms
+npx react-native run-ios      # iOS
+npx react-native run-android  # Android
+```
+
+## � Project Structure
 
 ```
 mobile-app/
-├── android/                 # Android WebView app
-│   ├── app/
-│   │   ├── src/main/
-│   │   │   ├── java/        # Java/Kotlin source files
-│   │   │   ├── res/         # Resources (layouts, icons, etc.)
-│   │   │   └── AndroidManifest.xml
-│   │   └── build.gradle
-│   ├── gradle/
-│   ├── build.gradle
-│   └── settings.gradle
-├── ios/                     # iOS WebView app (future)
-└── README.md               # This file
+├── 🚀 setup-react-native.sh     # Auto-setup script
+├── 🍎 setup-ios.sh              # iOS-specific setup
+├── 📖 CROSS_PLATFORM_GUIDE.md   # Detailed guide
+├── 📖 MOBILE_APP_GUIDE.md       # Original guide
+│
+├── ⚛️  react-native/             # Cross-platform app
+│   ├── App.js                    # Main app component
+│   ├── package.json              # Dependencies
+│   └── src/
+│       ├── components/           # Reusable components
+│       ├── screens/              # App screens
+│       └── config/               # Configuration
+│
+└── 📚 docs/                      # Documentation
 ```
 
-## 🛠 Build Instructions
-
-### Android APK:
-
-1. Install Android Studio
-2. Open the `android/` project
-3. Connect Android device or start emulator
-4. Click "Run" or use `./gradlew assembleDebug`
-
-### Distribution:
-
-- **Play Store**: Submit through Google Play Console
 - **Direct APK**: Share the generated APK file
 - **Enterprise**: Use internal distribution methods
 
