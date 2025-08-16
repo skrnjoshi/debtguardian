@@ -10,12 +10,12 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <ChartLine className="text-primary text-2xl" />
-              <h1 className="text-xl font-bold text-gray-900">DebtGuardian</h1>
+              <ChartLine className="text-primary text-xl sm:text-2xl" />
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">DebtGuardian</h1>
             </div>
             <Button
               onClick={() => (window.location.href = "/login")}
-              className="bg-primary hover:bg-blue-800"
+              className="bg-primary hover:bg-blue-800 text-sm sm:text-base px-3 sm:px-4"
             >
               Sign In
             </Button>
@@ -24,19 +24,19 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+        <div className="text-center mb-8 sm:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
             Take Control of Your Debt with DebtGuardian
           </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
             Comprehensive loan management with payment tracking, automated
             calculations, and financial analytics. Achieve financial freedom
             with professional-grade debt management tools.
           </p>
           <Button
             onClick={() => (window.location.href = "/login")}
-            className="bg-primary hover:bg-blue-800 text-lg px-8 py-3"
+            className="bg-primary hover:bg-blue-800 text-base sm:text-lg px-6 sm:px-8 py-2 sm:py-3"
           >
             Get Started Free
           </Button>

@@ -186,16 +186,17 @@ export default function PayoffCalculator() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <ChartLine className="text-primary text-2xl" />
-              <h1 className="text-xl font-bold text-gray-900">
+              <ChartLine className="text-primary text-xl sm:text-2xl" />
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">
                 Payoff Calculator
               </h1>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <Link href="/">
-                <Button variant="outline" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Dashboard
+                <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                  <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Back to Dashboard</span>
+                  <span className="sm:hidden">Back</span>
                 </Button>
               </Link>
             </div>

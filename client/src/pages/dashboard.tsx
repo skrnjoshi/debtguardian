@@ -4,7 +4,8 @@ import { useAuth, apiClient, authStorage } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { apiRequest } from "@/lib/queryClient";
-import { ChartLine, LogOut, Settings } from "lucide-react";
+import { ChartLine, LogOut, Settings, Menu, X } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { OverviewCards } from "@/components/dashboard/overview-cards";
 import { LoanCard } from "@/components/dashboard/loan-card";
@@ -54,6 +55,8 @@ export default function Dashboard() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [showProfileSettings, setShowProfileSettings] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const isMobile = useIsMobile();
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -148,18 +151,19 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <ChartLine className="text-primary text-2xl" />
-              <h1 className="text-xl font-bold text-gray-900">DebtGuardian</h1>
+              <ChartLine className="text-primary text-xl sm:text-2xl" />
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">DebtGuardian</h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
+              <span className="text-sm text-gray-600 truncate">
                 Welcome back, {user?.firstName || "User"}
               </span>
               <Button
                 onClick={() => setShowProfileSettings(true)}
                 variant="outline"
                 size="sm"
-                className="mr-2"
               >
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
@@ -169,14 +173,64 @@ export default function Dashboard() {
                 Logout
               </Button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <Button
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                variant="outline"
+                size="sm"
+              >
+                {showMobileMenu ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </Button>
+            </div>
           </div>
+
+          {/* Mobile Menu */}
+          {showMobileMenu && (
+            <div className="md:hidden border-t border-gray-200 py-4">
+              <div className="flex flex-col space-y-3">
+                <div className="text-sm text-gray-600 px-2">
+                  Welcome back, {user?.firstName || "User"}
+                </div>
+                <Button
+                  onClick={() => {
+                    setShowProfileSettings(true);
+                    setShowMobileMenu(false);
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="justify-start"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Settings
+                </Button>
+                <Button 
+                  onClick={() => {
+                    logout();
+                    setShowMobileMenu(false);
+                  }} 
+                  variant="outline" 
+                  size="sm"
+                  className="justify-start"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Financial Overview */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
             Financial Overview
           </h2>
           <OverviewCards analytics={analytics} isLoading={analyticsLoading} />
