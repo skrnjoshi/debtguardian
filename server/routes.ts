@@ -46,13 +46,6 @@ router.get("/health", (req: Request, res: Response) => {
   res.status(200).json(healthcheck);
 });
 
-// APK download endpoint - redirect to direct file access for better compatibility
-router.get("/download/apk/:version", (req: Request, res: Response) => {
-  const { version } = req.params;
-  // Redirect to direct file access instead of serving through API
-  res.redirect(301, `/DebtGuardian-${version}.apk`);
-});
-
 // System status endpoint for monitoring
 router.get("/status", (req: Request, res: Response) => {
   const status = {
@@ -150,6 +143,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       uptime: process.uptime(),
       memory: process.memoryUsage(),
     });
+  });
+
+  // APK download endpoint - PUBLIC ROUTE (no authentication required)
+  app.get("/api/download/apk/:version", (req: Request, res: Response) => {
+    const { version } = req.params;
+    console.log(`📱 APK download request for version: ${version}`);
+    // Redirect to direct file access instead of serving through API
+    res.redirect(301, `/DebtGuardian-${version}.apk`);
   });
 
   // Test route to verify API routing is working
