@@ -40,7 +40,6 @@
     "db:studio": "drizzle-kit studio",
     "analyze": "npx vite-bundle-analyzer dist/public",
     "clean": "rm -rf dist node_modules/.cache",
-    "prestart": "npm run build",
     "health": "node -e \"console.log('Health check passed')\"",
     "security:audit": "npm audit",
     "lint": "echo 'Linting passed'",
