@@ -10,10 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function Landing() {
-  const handleDownload = (filename) => {
+  const handleDownload = () => {
+    // Create download link for APK
     const link = document.createElement("a");
-    link.href = `/${filename}`;
-    link.download = filename;
+    link.href = "/DebtGuardian-v1.0.2-release.apk";
+    link.download = "DebtGuardian-v1.0.2-release.apk";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -147,7 +148,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-center items-center py-6 gap-4">
             <Button
-              onClick={() => handleDownload("DebtGuardian-v1.0.2-release.apk")}
+              onClick={handleDownload}
               className="bg-primary hover:bg-blue-800 text-sm px-4 py-2 flex items-center gap-2"
             >
               <Download className="w-4 h-4" />
