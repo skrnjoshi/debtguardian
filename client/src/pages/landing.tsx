@@ -41,8 +41,8 @@ export default function Landing() {
                 <Button
                   onClick={() => {
                     const link = document.createElement("a");
-                    link.href = "/DebtGuardian-v1.0.2-release.apk";
-                    link.download = "DebtGuardian-v1.0.2-release.apk";
+                    link.href = "/DebtGuardian-v1.0.6-release.apk";
+                    link.download = "DebtGuardian-v1.0.6-release.apk";
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
@@ -83,13 +83,6 @@ export default function Landing() {
             Get Started Free
           </Button>
         </div>
-
-        {/* Mobile App Banner - Hidden in native app */}
-        {!isNativeApp && (
-          <div className="bg-gray-800 text-white p-4 text-center">
-            <p>Get the mobile app for a better experience!</p>
-          </div>
-        )}
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
@@ -157,8 +150,8 @@ export default function Landing() {
                       className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
                       onClick={() => {
                         const link = document.createElement("a");
-                        link.href = "/DebtGuardian-v1.0.0-release.apk";
-                        link.download = "DebtGuardian-v1.0.0-release.apk";
+                        link.href = "/DebtGuardian-v1.0.6-release.apk";
+                        link.download = "DebtGuardian-v1.0.6-release.apk";
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);

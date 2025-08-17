@@ -5,12 +5,13 @@ import { useState, useEffect } from "react";
  */
 export function useIsNativeApp() {
   const [isNativeApp, setIsNativeApp] = useState(() => {
-    // Initial check - be more aggressive in detecting WebView
-    const userAgent = navigator.userAgent;
+    // Initial check - only detect if we have explicit native app flags
+    if (typeof window === "undefined") return false;
+    
+    const windowObj = window as any;
     return (
-      /wv|WebView|Version\/.*Chrome|Android.*Chrome|ReactNative/i.test(
-        userAgent
-      ) && !/Edg\/|Chrome\/.*Safari/i.test(userAgent)
+      windowObj.isDebtGuardianNativeApp === true ||
+      localStorage.getItem("isDebtGuardianNativeApp") === "true"
     );
   });
 
@@ -27,77 +28,31 @@ export function useIsNativeApp() {
           localStorage.getItem("isDebtGuardianNativeApp") === "true";
       } catch (e) {}
 
-      // Check UserAgent for WebView indicators - improved patterns
-      const userAgent = navigator.userAgent;
-      const isWebView = /wv|WebView/i.test(userAgent);
-      const isAndroidWebView = /Android.*wv/i.test(userAgent);
-      const isChromeWebView = /Version\/.*Chrome/i.test(userAgent);
-      const isReactNativeWebView = /ReactNative/i.test(userAgent);
+      // Only consider it a native app if we have explicit flags set by our native app
+      const finalIsNative = isNative || isNativeFromStorage;
 
-      // Check if we're running in any kind of WebView environment
-      const isAnyWebView =
-        isWebView ||
-        isAndroidWebView ||
-        isChromeWebView ||
-        isReactNativeWebView;
-
-      // Also check if we're not in a regular browser (no window.chrome, etc.)
-      const isNotRegularBrowser =
-        !windowObj.chrome || !navigator.plugins?.length;
-
-      const finalIsNative =
-        isNative ||
-        isNativeFromStorage ||
-        isAnyWebView ||
-        (isNotRegularBrowser && /Android/i.test(userAgent));
-
-      console.log("🔍 Native app detection check:", {
-        isDebtGuardianNativeApp: windowObj.isDebtGuardianNativeApp,
-        DebtGuardianAppVersion: windowObj.DebtGuardianAppVersion,
-        isNativeFromStorage,
-        isWebView,
-        isAndroidWebView,
-        isChromeWebView,
-        isReactNativeWebView,
-        isAnyWebView,
-        isNotRegularBrowser,
-        isNative,
-        finalIsNative,
-        currentState: isNativeApp,
-        userAgent: navigator.userAgent,
-        href: window.location.href,
-        timestamp: new Date().toISOString(),
-      });
-
-      if (finalIsNative !== isNativeApp) {
-        setIsNativeApp(finalIsNative);
-        console.log(
-          "🚀 Native app detection changed:",
-          finalIsNative ? "✅ NATIVE APP DETECTED" : "🌐 WEB BROWSER"
-        );
-      }
-
-      return finalIsNative;
+      setIsNativeApp(finalIsNative);
     };
 
     // Check immediately
     checkNativeApp();
 
-    // Check multiple times to catch the injection
-    const timer1 = setTimeout(checkNativeApp, 100);
-    const timer2 = setTimeout(checkNativeApp, 500);
-    const timer3 = setTimeout(checkNativeApp, 1000);
-    const timer4 = setTimeout(checkNativeApp, 2000);
-    const timer5 = setTimeout(checkNativeApp, 3000);
+    // Also listen for the native app ready event
+    const handleNativeAppReady = (event: CustomEvent) => {
+      console.log("� Native app ready event received:", event.detail);
+      setIsNativeApp(true);
+    };
+
+    window.addEventListener("nativeAppReady", handleNativeAppReady as EventListener);
+
+    // Check periodically in case the native app injects the flag later
+    const interval = setInterval(checkNativeApp, 1000);
 
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearTimeout(timer4);
-      clearTimeout(timer5);
+      window.removeEventListener("nativeAppReady", handleNativeAppReady as EventListener);
+      clearInterval(interval);
     };
-  }, [isNativeApp]);
+  }, []);
 
   return isNativeApp;
 }
