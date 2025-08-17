@@ -7,6 +7,7 @@ Native mobile app for iOS and Android built with React Native WebView.
 This directory contains a complete React Native project that wraps the DebtGuardian web app in a native mobile container. The app provides a native mobile experience while leveraging the existing web application.
 
 **Key Features:**
+
 - Cross-platform (iOS & Android)
 - WebView-based architecture
 - Native app detection (hides download prompts when running in native app)
@@ -19,7 +20,7 @@ mobile-app/
 ├── DebtGuardianApp/              # Complete React Native project
 │   ├── App.tsx                   # Main component with WebView + native detection
 │   ├── android/                  # Android build configuration
-│   ├── ios/                      # iOS build configuration  
+│   ├── ios/                      # iOS build configuration
 │   └── package.json              # Dependencies
 ├── releases/                     # Pre-built APK files
 │   ├── DebtGuardian-v1.0.0-release.apk (46MB)
@@ -47,11 +48,13 @@ cd android && ./gradlew assembleRelease
 ## 🔧 Development
 
 ### Requirements
+
 - Node.js 18+
 - Android Studio (for Android builds)
 - Xcode (for iOS builds, Mac only)
 
 ### Setup
+
 ```bash
 cd DebtGuardianApp
 npm install
@@ -59,7 +62,7 @@ npm install
 # For Android
 cd android && ./gradlew assembleDebug
 
-# For iOS (Mac only)  
+# For iOS (Mac only)
 cd ios && pod install
 npx react-native run-ios
 ```
@@ -69,7 +72,7 @@ npx react-native run-ios
 - **Package Name:** com.debtguardian.app
 - **Web URL:** https://debtguardian.onrender.com
 - **Version:** 1.0.0
-- **Native Features:** 
+- **Native Features:**
   - Auto-detection when running in native app
   - Hides web download prompts appropriately
   - Native status bar styling
@@ -79,7 +82,7 @@ npx react-native run-ios
 The app uses a simple but effective WebView approach:
 
 1. **React Native Shell:** Provides native app container
-2. **WebView Component:** Loads the web application  
+2. **WebView Component:** Loads the web application
 3. **JavaScript Injection:** Sets native app detection flag
 4. **Web App Integration:** Conditionally shows/hides download UI
 

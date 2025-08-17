@@ -10,21 +10,32 @@ export function useIsNativeApp() {
     // Check if the native app flag is set
     const checkNativeApp = () => {
       const isNative = (window as any).isDebtGuardianNativeApp === true;
-      setIsNativeApp(isNative);
 
-      if (isNative) {
-        console.log("Detected DebtGuardian native app environment");
+      if (isNative !== isNativeApp) {
+        setIsNativeApp(isNative);
+        console.log(
+          "Native app detection:",
+          isNative ? "NATIVE APP" : "WEB BROWSER"
+        );
       }
+
+      return isNative;
     };
 
     // Check immediately
     checkNativeApp();
 
-    // Also check after a short delay in case the flag is set after initial load
-    const timer = setTimeout(checkNativeApp, 100);
+    // Check multiple times to catch the injection
+    const timer1 = setTimeout(checkNativeApp, 100);
+    const timer2 = setTimeout(checkNativeApp, 500);
+    const timer3 = setTimeout(checkNativeApp, 1000);
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, [isNativeApp]);
 
   return isNativeApp;
 }

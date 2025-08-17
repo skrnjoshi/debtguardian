@@ -35,18 +35,54 @@ export default function Downloads() {
 
         {/* Download Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Android APK Release - Hidden in native app */}
+          {/* Android APK Release (Updated) - Hidden in native app */}
           {!isNativeApp ? (
-            <Card className="hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-lg transition-shadow border-2 border-green-200">
               <CardHeader className="text-center">
                 <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
                   <Smartphone className="w-8 h-8 text-green-600" />
                 </div>
-                <CardTitle className="text-xl">Android App (Release)</CardTitle>
+                <CardTitle className="text-xl">Android App (Latest)</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-gray-600 mb-4">
-                  Optimized production build for Android devices
+                  Latest build with bug fixes and improvements
+                </p>
+                <div className="space-y-2 mb-4">
+                  <div className="text-sm text-gray-500">
+                    📱 DebtGuardian-v1.0.0-release-updated.apk
+                  </div>
+                  <div className="text-sm text-green-600 font-semibold">
+                    ✅ Back Button Support • Native Detection • Enhanced UI
+                  </div>
+                </div>
+                <Button
+                  onClick={() =>
+                    handleDownload("DebtGuardian-v1.0.0-release-updated.apk")
+                  }
+                  className="w-full bg-green-600 hover:bg-green-700"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Latest APK
+                </Button>
+              </CardContent>
+            </Card>
+          ) : null}
+
+          {/* Android APK Release (Original) - Hidden in native app */}
+          {!isNativeApp ? (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="text-center">
+                <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                  <Smartphone className="w-8 h-8 text-blue-600" />
+                </div>
+                <CardTitle className="text-xl">
+                  Android App (Original)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-gray-600 mb-4">
+                  Original stable build for Android devices
                 </p>
                 <div className="space-y-2 mb-6">
                   <p className="text-sm text-gray-500">Version: v1.0.0</p>

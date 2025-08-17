@@ -14,7 +14,7 @@ A professional debt and loan management application built with React, TypeScript
 ## ✨ Features
 
 - 🏦 **Loan Management** - Track multiple loans with detailed analytics
-- 📊 **Financial Dashboard** - Real-time financial health insights  
+- 📊 **Financial Dashboard** - Real-time financial health insights
 - 💰 **Payment Tracking** - Monitor payment history and progress
 - 📱 **Multi-Platform** - Web app + Native Android APK
 - 🔐 **Secure Authentication** - JWT-based user system
@@ -23,6 +23,7 @@ A professional debt and loan management application built with React, TypeScript
 ## 🚀 Quick Start
 
 ### Development
+
 ```bash
 # Install dependencies
 npm install
@@ -32,6 +33,7 @@ npm run dev
 ```
 
 ### Production Build
+
 ```bash
 # Build for production
 npm run build
@@ -65,7 +67,7 @@ The mobile app provides a native Android experience using React Native WebView:
 
 ---
 
-*Ready to use! Visit the live app or download the mobile APK.*
+_Ready to use! Visit the live app or download the mobile APK._
 
 ### Android App Available Now!
 
