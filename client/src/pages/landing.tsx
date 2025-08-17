@@ -12,30 +12,8 @@ import { useIsNativeApp } from "@/hooks/use-native-app";
 export default function Landing() {
   const isNativeApp = useIsNativeApp();
 
-  // Add temporary debugging
-  console.log("🔍 Landing page render - isNativeApp:", isNativeApp);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Temporary Debug Banner */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: isNativeApp ? "green" : "red",
-          color: "white",
-          padding: "5px",
-          textAlign: "center",
-          fontSize: "12px",
-          zIndex: 9999,
-        }}
-      >
-        DEBUG: {isNativeApp ? "✅ NATIVE APP MODE" : "❌ WEB BROWSER MODE"} -
-        userAgent: {navigator.userAgent.substring(0, 50)}...
-      </div>
-
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -291,3 +269,5 @@ export default function Landing() {
     </div>
   );
 }
+
+
