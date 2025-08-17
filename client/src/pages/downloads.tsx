@@ -35,35 +35,35 @@ export default function Downloads() {
 
         {/* Download Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Android APK Release (Updated) - Hidden in native app */}
+          {/* Android APK Release v1.0.1 (Latest) - Hidden in native app */}
           {!isNativeApp ? (
             <Card className="hover:shadow-lg transition-shadow border-2 border-green-200">
               <CardHeader className="text-center">
                 <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
                   <Smartphone className="w-8 h-8 text-green-600" />
                 </div>
-                <CardTitle className="text-xl">Android App (Latest)</CardTitle>
+                <CardTitle className="text-xl">Android App v1.0.1</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-gray-600 mb-4">
-                  Latest build with bug fixes and improvements
+                  🚀 Latest build with visual version indicators and all fixes
                 </p>
                 <div className="space-y-2 mb-4">
                   <div className="text-sm text-gray-500">
-                    📱 DebtGuardian-v1.0.0-release-updated.apk
+                    📱 DebtGuardian-v1.0.1-release.apk
                   </div>
                   <div className="text-sm text-green-600 font-semibold">
-                    ✅ Back Button Support • Native Detection • Enhanced UI
+                    ✅ Version Popup • Back Button • Native Detection • Enhanced UI
                   </div>
                 </div>
                 <Button
                   onClick={() =>
-                    handleDownload("DebtGuardian-v1.0.0-release-updated.apk")
+                    handleDownload("DebtGuardian-v1.0.1-release.apk")
                   }
                   className="w-full bg-green-600 hover:bg-green-700"
                 >
                   <Download className="w-4 h-4 mr-2" />
-                  Download Latest APK
+                  Download v1.0.1 APK
                 </Button>
               </CardContent>
             </Card>
