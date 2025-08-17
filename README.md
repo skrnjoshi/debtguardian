@@ -311,8 +311,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Saikiran Donkana**
 
-- GitHub: [@yourusername](https://github.com/skrnjoshi)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/skrnjoshi)
+- GitHub: [@skrnjoshi](https://github.com/skrnjoshi)
+- LinkedIn: [skrnjoshi](https://linkedin.com/in/skrnjoshi)
 - Email: saikiranjoshi02@example.com
 
 ## 🙏 Acknowledgments
