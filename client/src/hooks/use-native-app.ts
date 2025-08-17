@@ -7,8 +7,11 @@ export function useIsNativeApp() {
   const [isNativeApp, setIsNativeApp] = useState(() => {
     // Initial check - be more aggressive in detecting WebView
     const userAgent = navigator.userAgent;
-    return /wv|WebView|Version\/.*Chrome|Android.*Chrome|ReactNative/i.test(userAgent) && 
-           !/Edg\/|Chrome\/.*Safari/i.test(userAgent);
+    return (
+      /wv|WebView|Version\/.*Chrome|Android.*Chrome|ReactNative/i.test(
+        userAgent
+      ) && !/Edg\/|Chrome\/.*Safari/i.test(userAgent)
+    );
   });
 
   useEffect(() => {
@@ -30,15 +33,23 @@ export function useIsNativeApp() {
       const isAndroidWebView = /Android.*wv/i.test(userAgent);
       const isChromeWebView = /Version\/.*Chrome/i.test(userAgent);
       const isReactNativeWebView = /ReactNative/i.test(userAgent);
-      
+
       // Check if we're running in any kind of WebView environment
-      const isAnyWebView = isWebView || isAndroidWebView || isChromeWebView || isReactNativeWebView;
-      
+      const isAnyWebView =
+        isWebView ||
+        isAndroidWebView ||
+        isChromeWebView ||
+        isReactNativeWebView;
+
       // Also check if we're not in a regular browser (no window.chrome, etc.)
-      const isNotRegularBrowser = !windowObj.chrome || !navigator.plugins?.length;
+      const isNotRegularBrowser =
+        !windowObj.chrome || !navigator.plugins?.length;
 
       const finalIsNative =
-        isNative || isNativeFromStorage || isAnyWebView || (isNotRegularBrowser && /Android/i.test(userAgent));
+        isNative ||
+        isNativeFromStorage ||
+        isAnyWebView ||
+        (isNotRegularBrowser && /Android/i.test(userAgent));
 
       console.log("🔍 Native app detection check:", {
         isDebtGuardianNativeApp: windowObj.isDebtGuardianNativeApp,

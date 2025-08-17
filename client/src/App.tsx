@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth, authStorage } from "@/hooks/useAuth";
+import { useNativeBackHandler } from "@/hooks/use-native-back-handler";
 import { lazy, Suspense, useEffect } from "react";
 
 // Lazy load components for better performance
@@ -30,6 +31,9 @@ function Router() {
   const { isAuthenticated, isLoading } = useAuth();
   const [location, setLocation] = useLocation();
   const hasToken = authStorage.getToken();
+
+  // Set up native app back button handling
+  useNativeBackHandler();
 
   useEffect(() => {
     // Redirect logic
