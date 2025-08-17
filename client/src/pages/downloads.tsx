@@ -35,6 +35,40 @@ export default function Downloads() {
 
         {/* Download Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Android APK Release v1.0.2 (Latest Enhanced) - Hidden in native app */}
+          {!isNativeApp ? (
+            <Card className="hover:shadow-lg transition-shadow border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-50">
+              <CardHeader className="text-center">
+                <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                  <Smartphone className="w-8 h-8 text-emerald-600" />
+                </div>
+                <CardTitle className="text-xl text-emerald-700">Android App v1.0.2 🔥</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-gray-600 mb-4">
+                  🚀 Enhanced build with advanced debugging and error handling
+                </p>
+                <div className="space-y-2 mb-4">
+                  <div className="text-sm text-gray-500">
+                    📱 DebtGuardian-v1.0.2-release.apk
+                  </div>
+                  <div className="text-sm text-emerald-600 font-semibold">
+                    ✅ Enhanced Popup • Advanced Logging • Back Button • Native Detection • Error Handling
+                  </div>
+                </div>
+                <Button
+                  onClick={() =>
+                    handleDownload("DebtGuardian-v1.0.2-release.apk")
+                  }
+                  className="w-full bg-emerald-600 hover:bg-emerald-700"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download v1.0.2 APK (Recommended)
+                </Button>
+              </CardContent>
+            </Card>
+          ) : null}
+
           {/* Android APK Release v1.0.1 (Latest) - Hidden in native app */}
           {!isNativeApp ? (
             <Card className="hover:shadow-lg transition-shadow border-2 border-green-200">
@@ -46,14 +80,15 @@ export default function Downloads() {
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-gray-600 mb-4">
-                  🚀 Latest build with visual version indicators and all fixes
+                  🚀 Previous build with visual version indicators and all fixes
                 </p>
                 <div className="space-y-2 mb-4">
                   <div className="text-sm text-gray-500">
                     📱 DebtGuardian-v1.0.1-release.apk
                   </div>
                   <div className="text-sm text-green-600 font-semibold">
-                    ✅ Version Popup • Back Button • Native Detection • Enhanced UI
+                    ✅ Version Popup • Back Button • Native Detection • Enhanced
+                    UI
                   </div>
                 </div>
                 <Button
