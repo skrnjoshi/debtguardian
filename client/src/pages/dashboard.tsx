@@ -293,13 +293,6 @@ export default function Dashboard() {
         onClose={() => setShowProfileSettings(false)}
         onProfileUpdated={handleProfileUpdated}
       />
-
-      {/* Mobile App Download Banner */}
-      {!isNativeApp && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 text-center">
-          <p>Get the mobile app for a better experience!</p>
-        </div>
-      )}
     </div>
   );
 }
