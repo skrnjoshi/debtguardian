@@ -313,7 +313,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - GitHub: [@skrnjoshi](https://github.com/skrnjoshi)
 - LinkedIn: [skrnjoshi](https://linkedin.com/in/skrnjoshi)
-- Email: saikiranjoshi02@example.com
+- Email: saikiranjoshi02@gmail.com
 
 ## 🙏 Acknowledgments
 
