@@ -11,7 +11,6 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function Landing() {
   const handleDownload = () => {
-    // Create download link for APK
     const link = document.createElement("a");
     link.href = "/DebtGuardian-v1.0.2-release.apk";
     link.download = "DebtGuardian-v1.0.2-release.apk";
@@ -30,6 +29,15 @@ export default function Landing() {
     }
   };
 
+  // Simple navigation functions
+  const handleSignIn = () => {
+    window.location.href = "/login";
+  };
+
+  const handleSignUp = () => {
+    window.location.href = "/signup";
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
@@ -45,7 +53,7 @@ export default function Landing() {
 
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Button
-                onClick={() => (window.location.href = "/login")}
+                onClick={handleSignIn}
                 className="bg-primary hover:bg-blue-800 text-sm sm:text-base px-3 sm:px-4"
               >
                 Sign In
@@ -67,7 +75,7 @@ export default function Landing() {
             with professional-grade debt management tools.
           </p>
           <Button
-            onClick={() => (window.location.href = "/login")}
+            onClick={handleSignIn}
             className="bg-primary hover:bg-blue-800 text-base sm:text-lg px-6 sm:px-8 py-2 sm:py-3"
           >
             Get Started Free
@@ -127,13 +135,13 @@ export default function Landing() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
-              onClick={() => (window.location.href = "/signup")}
+              onClick={handleSignUp}
               className="bg-primary hover:bg-blue-800 text-lg px-8 py-3"
             >
               Create Account
             </Button>
             <Button
-              onClick={() => (window.location.href = "/login")}
+              onClick={handleSignIn}
               variant="outline"
               className="text-lg px-8 py-3"
             >
