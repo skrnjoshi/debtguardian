@@ -7,14 +7,35 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MobileAppBanner } from "@/components/mobile-app-banner";
 import { useIsNativeApp } from "@/hooks/use-native-app";
 
 export default function Landing() {
   const isNativeApp = useIsNativeApp();
 
+  // Add temporary debugging
+  console.log("🔍 Landing page render - isNativeApp:", isNativeApp);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* Temporary Debug Banner */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: isNativeApp ? "green" : "red",
+          color: "white",
+          padding: "5px",
+          textAlign: "center",
+          fontSize: "12px",
+          zIndex: 9999,
+        }}
+      >
+        DEBUG: {isNativeApp ? "✅ NATIVE APP MODE" : "❌ WEB BROWSER MODE"} -
+        userAgent: {navigator.userAgent.substring(0, 50)}...
+      </div>
+
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,22 +47,24 @@ export default function Landing() {
               </h1>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* Download App Button */}
-              <Button
-                onClick={() => (window.location.href = "/downloads")}
-                variant="outline"
-                className="hidden md:flex items-center space-x-1 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 border-green-300 text-green-700 hover:bg-green-50"
-              >
-                <Download className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Downloads</span>
-              </Button>
+              {/* Download App Button - Hidden in native app */}
+              {!isNativeApp && (
+                <Button
+                  onClick={() => (window.location.href = "/downloads")}
+                  variant="outline"
+                  className="hidden md:flex items-center space-x-1 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 border-green-300 text-green-700 hover:bg-green-50"
+                >
+                  <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span>Downloads</span>
+                </Button>
+              )}
               {/* Mobile APK Download Button - Hidden in native app */}
               {!isNativeApp && (
                 <Button
                   onClick={() => {
                     const link = document.createElement("a");
-                    link.href = "/DebtGuardian-v1.0.0-release.apk";
-                    link.download = "DebtGuardian-v1.0.0-release.apk";
+                    link.href = "/DebtGuardian-v1.0.2-release.apk";
+                    link.download = "DebtGuardian-v1.0.2-release.apk";
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
@@ -82,6 +105,13 @@ export default function Landing() {
             Get Started Free
           </Button>
         </div>
+
+        {/* Mobile App Banner - Hidden in native app */}
+        {!isNativeApp && (
+          <div className="bg-gray-800 text-white p-4 text-center">
+            <p>Get the mobile app for a better experience!</p>
+          </div>
+        )}
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
@@ -125,115 +155,102 @@ export default function Landing() {
           </Card>
         </div>
 
-        {/* Mobile App Download Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-8 text-white mb-16">
-          <div className="text-center">
-            <h3 className="text-2xl sm:text-3xl font-bold mb-4">
-              📱 Download Our Mobile App
-            </h3>
-            <p className="text-blue-100 mb-8 text-lg">
-              Get the full DebtGuardian experience on your mobile device
-            </p>
+        {/* Mobile App Download Section - Hidden in native app */}
+        {!isNativeApp && (
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-8 text-white mb-16">
+            <div className="text-center">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-4">
+                📱 Download Our Mobile App
+              </h3>
+              <p className="text-blue-100 mb-8 text-lg">
+                Get the full DebtGuardian experience on your mobile device
+              </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {/* Android APK */}
-              <div className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
-                <div className="text-4xl mb-3">🤖</div>
-                <h4 className="font-semibold text-lg mb-3">Android APK</h4>
-                <p className="text-blue-100 text-sm mb-4">
-                  Native Android app with full functionality
-                </p>
-                <div className="space-y-2">
-                  {!isNativeApp ? (
-                    <>
-                      <Button
-                        className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
-                        onClick={() => {
-                          const link = document.createElement("a");
-                          link.href = "/DebtGuardian-v1.0.0-release.apk";
-                          link.download = "DebtGuardian-v1.0.0-release.apk";
-                          document.body.appendChild(link);
-                          link.click();
-                          document.body.removeChild(link);
-                        }}
-                      >
-                        Download APK (46MB)
-                      </Button>
-                      <p className="text-xs text-blue-200">
-                        Production Release
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-full py-3 px-4 bg-green-500/20 text-green-100 rounded border border-green-400/30">
-                        ✅ Already Installed
-                      </div>
-                      <p className="text-xs text-green-200">
-                        You're using the native app!
-                      </p>
-                    </>
-                  )}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                {/* Android APK */}
+                <div className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
+                  <div className="text-4xl mb-3">🤖</div>
+                  <h4 className="font-semibold text-lg mb-3">Android APK</h4>
+                  <p className="text-blue-100 text-sm mb-4">
+                    Native Android app with full functionality
+                  </p>
+                  <div className="space-y-2">
+                    <Button
+                      className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
+                      onClick={() => {
+                        const link = document.createElement("a");
+                        link.href = "/DebtGuardian-v1.0.0-release.apk";
+                        link.download = "DebtGuardian-v1.0.0-release.apk";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
+                    >
+                      Download APK (46MB)
+                    </Button>
+                    <p className="text-xs text-blue-200">Production Release</p>
+                  </div>
+                </div>
+
+                {/* PWA */}
+                <div className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
+                  <div className="text-4xl mb-3">🌐</div>
+                  <h4 className="font-semibold text-lg mb-3">Web App (PWA)</h4>
+                  <p className="text-blue-100 text-sm mb-4">
+                    Works on all devices - iOS, Android, Desktop
+                  </p>
+                  <Button
+                    className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
+                    onClick={() => {
+                      if ("serviceWorker" in navigator) {
+                        alert(
+                          "💡 Add to Home Screen:\n\n" +
+                            "Android: Menu → Add to Home Screen\n" +
+                            "iOS: Share → Add to Home Screen\n\n" +
+                            "Enjoy app-like experience!"
+                        );
+                      } else {
+                        window.open(
+                          "https://debtguardian.onrender.com",
+                          "_blank"
+                        );
+                      }
+                    }}
+                  >
+                    Add to Home Screen
+                  </Button>
+                  <p className="text-xs text-blue-200">
+                    No installation required
+                  </p>
+                </div>
+
+                {/* Coming Soon - iOS */}
+                <div className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
+                  <div className="text-4xl mb-3">🍎</div>
+                  <h4 className="font-semibold text-lg mb-3">iOS App</h4>
+                  <p className="text-blue-100 text-sm mb-4">
+                    Native iOS app coming to App Store soon
+                  </p>
+                  <Button
+                    className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
+                    disabled
+                  >
+                    Coming Soon
+                  </Button>
+                  <p className="text-xs text-blue-200">In development</p>
                 </div>
               </div>
 
-              {/* PWA */}
-              <div className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
-                <div className="text-4xl mb-3">🌐</div>
-                <h4 className="font-semibold text-lg mb-3">Web App (PWA)</h4>
-                <p className="text-blue-100 text-sm mb-4">
-                  Works on all devices - iOS, Android, Desktop
-                </p>
-                <Button
-                  className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
-                  onClick={() => {
-                    if ("serviceWorker" in navigator) {
-                      alert(
-                        "💡 Add to Home Screen:\n\n" +
-                          "Android: Menu → Add to Home Screen\n" +
-                          "iOS: Share → Add to Home Screen\n\n" +
-                          "Enjoy app-like experience!"
-                      );
-                    } else {
-                      window.open(
-                        "https://debtguardian.onrender.com",
-                        "_blank"
-                      );
-                    }
-                  }}
-                >
-                  Add to Home Screen
-                </Button>
-                <p className="text-xs text-blue-200">
-                  No installation required
+              <div className="mt-8 p-4 bg-white/10 rounded-lg">
+                <p className="text-sm text-blue-100">
+                  <strong>📋 APK Installation:</strong> Enable "Unknown Sources"
+                  in Android Settings → Security, then download and open the APK
+                  file to install.
                 </p>
               </div>
-
-              {/* Coming Soon - iOS */}
-              <div className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
-                <div className="text-4xl mb-3">🍎</div>
-                <h4 className="font-semibold text-lg mb-3">iOS App</h4>
-                <p className="text-blue-100 text-sm mb-4">
-                  Native iOS app coming to App Store soon
-                </p>
-                <Button
-                  className="w-full bg-white/20 hover:bg-white/30 border border-white/30"
-                  disabled
-                >
-                  Coming Soon
-                </Button>
-                <p className="text-xs text-blue-200">In development</p>
-              </div>
-            </div>
-
-            <div className="mt-8 p-4 bg-white/10 rounded-lg">
-              <p className="text-sm text-blue-100">
-                <strong>📋 APK Installation:</strong> Enable "Unknown Sources"
-                in Android Settings → Security, then download and open the APK
-                file to install.
-              </p>
             </div>
           </div>
-        </div>
+        )}
 
         {/* CTA Section */}
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
@@ -251,13 +268,16 @@ export default function Landing() {
             >
               Create Account
             </Button>
-            <Button
-              onClick={() => (window.location.href = "/downloads")}
-              variant="outline"
-              className="text-lg px-8 py-3 border-green-300 text-green-700 hover:bg-green-50"
-            >
-              📱 Download App
-            </Button>
+            {/* Download App Button - Hidden in native app */}
+            {!isNativeApp && (
+              <Button
+                onClick={() => (window.location.href = "/downloads")}
+                variant="outline"
+                className="text-lg px-8 py-3 border-green-300 text-green-700 hover:bg-green-50"
+              >
+                📱 Download App
+              </Button>
+            )}
             <Button
               onClick={() => (window.location.href = "/login")}
               variant="outline"
@@ -268,9 +288,6 @@ export default function Landing() {
           </div>
         </div>
       </main>
-
-      {/* Mobile App Download Banner */}
-      <MobileAppBanner />
     </div>
   );
 }

@@ -42,7 +42,9 @@ export default function Downloads() {
                 <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
                   <Smartphone className="w-8 h-8 text-emerald-600" />
                 </div>
-                <CardTitle className="text-xl text-emerald-700">Android App v1.0.2 🔥</CardTitle>
+                <CardTitle className="text-xl text-emerald-700">
+                  Android App v1.0.2 🔥
+                </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-gray-600 mb-4">
@@ -53,7 +55,8 @@ export default function Downloads() {
                     📱 DebtGuardian-v1.0.2-release.apk
                   </div>
                   <div className="text-sm text-emerald-600 font-semibold">
-                    ✅ Enhanced Popup • Advanced Logging • Back Button • Native Detection • Error Handling
+                    ✅ Enhanced Popup • Advanced Logging • Back Button • Native
+                    Detection • Error Handling
                   </div>
                 </div>
                 <Button

@@ -14,7 +14,7 @@ import { PaymentForm } from "@/components/dashboard/payment-form";
 import { FinancialHealth } from "@/components/dashboard/financial-health";
 import { AnalyticsCharts } from "@/components/dashboard/analytics-charts";
 import { UserProfileSettings } from "@/components/dashboard/user-profile-settings";
-import { MobileAppBanner } from "@/components/mobile-app-banner";
+import { useIsNativeApp } from "@/hooks/use-native-app";
 
 interface Loan {
   id: string;
@@ -58,19 +58,17 @@ export default function Dashboard() {
   const [showProfileSettings, setShowProfileSettings] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const isMobile = useIsMobile();
+  const isNativeApp = useIsNativeApp();
 
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       toast({
         title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
+        description: "Please log in to access the dashboard.",
         variant: "destructive",
       });
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 500);
-      return;
+      window.location.href = "/login";
     }
   }, [isAuthenticated, isLoading, toast]);
 
@@ -81,20 +79,18 @@ export default function Dashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/loans"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/analytics/overview"] });
     },
-    onError: (error) => {
-      if (isUnauthorizedError(error)) {
+    onError: (e: any) => {
+      if (!isUnauthorizedError(e)) {
         toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
+          title: "Initialization Failed",
+          description:
+            "Could not initialize user settings. Some features may not work correctly.",
           variant: "destructive",
         });
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 500);
-        return;
       }
-      console.error("Failed to initialize user:", error);
+      console.error("Failed to initialize user:", e);
     },
     retry: false, // Don't retry initialization
   });
@@ -299,7 +295,11 @@ export default function Dashboard() {
       />
 
       {/* Mobile App Download Banner */}
-      <MobileAppBanner />
+      {!isNativeApp && (
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 text-center">
+          <p>Get the mobile app for a better experience!</p>
+        </div>
+      )}
     </div>
   );
 }
